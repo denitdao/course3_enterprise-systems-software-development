@@ -1,0 +1,31 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="ua.kpi.tef.essd.jpa">
+
+        <description>
+            Persistence unit for the Clothes Designer Application
+        </description>
+
+        <class>ua.kpi.tef.essd.entity.Clothes</class>
+        <class>ua.kpi.tef.essd.entity.ClothesSet</class>
+        <class>ua.kpi.tef.essd.entity.Part</class>
+        <class>ua.kpi.tef.essd.entity.User</class>
+        <class>ua.kpi.tef.essd.entity.Property</class>
+
+        <properties>
+            <property name="hibernate.connection.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/clothes_designer"/>
+            <property name="hibernate.connection.user" value="clothes_designer_app"/>
+            <property name="hibernate.connection.password" value="CDUa*D?aGpHs87/"/>
+            <property name="hibernate.connection.autocommit" value="false"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+        </properties>
+
+    </persistence-unit>
+
+</persistence>

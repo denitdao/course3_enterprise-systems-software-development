@@ -10,6 +10,10 @@ repositories {
 }
 
 dependencies {
+    compile group: 'org.clojure', name: 'java.jdbc', version: '0.7.12'
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.27.Final'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.23'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
