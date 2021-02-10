@@ -2,7 +2,8 @@
 /shelf/
 /workspace.xml
 # Datasource local storage ignored files
-/../../../../../../../../../:\home\denys\work\KPI\3rd year\2nd term\enterprise_systems_software_development\.idea/dataSources/
+#/../../../../../../../../../:\home\denys\work\KPI\3rd year\2nd term\enterprise_systems_software_development\.idea/dataSources/
+/dataSources/
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
