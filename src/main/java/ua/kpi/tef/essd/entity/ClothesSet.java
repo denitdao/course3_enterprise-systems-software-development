@@ -8,14 +8,23 @@ import java.util.Set;
 public class ClothesSet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String name;
 
     @OneToMany(mappedBy = "clothesSet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Clothes> clothesSet;
+    private Set<Clothing> clothesSet;
 
-    public int getId() {
+    public void addClothing(Clothing clothing){
+        clothing.setClothesSet(this);
+        clothesSet.add(clothing);
+    }
+
+    public void removeClothing(Clothing clothing) {
+        clothesSet.remove(clothing);
+    }
+
+    public Integer getId() {
         return id;
     }
 
@@ -25,5 +34,13 @@ public class ClothesSet {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Clothing> getClothesSet() {
+        return clothesSet;
+    }
+
+    public void setClothesSet(Set<Clothing> clothesSet) {
+        this.clothesSet = clothesSet;
     }
 }

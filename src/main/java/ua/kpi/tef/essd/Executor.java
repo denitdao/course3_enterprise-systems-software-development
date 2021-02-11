@@ -15,10 +15,9 @@ public class Executor {
         entityManager.getTransaction().begin();
 
         Part parts = new Part();
-        parts.setName("Test");
+//        parts.setName("Test");
 
         entityManager.persist(parts);
-
         System.out.println("Resulting to " + entityManager.find(Part.class, 1));
 
         entityManager.getTransaction().commit();

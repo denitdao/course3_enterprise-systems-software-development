@@ -9,10 +9,10 @@
             Persistence unit for the Clothes Designer Application
         </description>
 
-        <class>ua.kpi.tef.essd.entity.Clothes</class>
-        <class>ua.kpi.tef.essd.entity.ClothesSet</class>
-        <class>ua.kpi.tef.essd.entity.Part</class>
         <class>ua.kpi.tef.essd.entity.User</class>
+        <class>ua.kpi.tef.essd.entity.ClothesSet</class>
+        <class>ua.kpi.tef.essd.entity.Clothing</class>
+        <class>ua.kpi.tef.essd.entity.Part</class>
         <class>ua.kpi.tef.essd.entity.Property</class>
 
         <properties>

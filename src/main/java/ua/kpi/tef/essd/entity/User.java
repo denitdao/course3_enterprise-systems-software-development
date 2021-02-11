@@ -1,38 +1,36 @@
 package ua.kpi.tef.essd.entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
+
     private String name;
-    private int age;
+
+    private short age;
+
+    private String description;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Clothes> clothes;
+    private Set<Clothing> clothes = new HashSet<>();
 
-    public User() {}
-
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
-        clothes = new ArrayList<>();
+    public void addClothing(Clothing clothing){
+        clothing.setUser(this);
+        clothes.add(clothing);
     }
 
-    public void addClothes(Clothes item){
-        item.setUser(this);
-        clothes.add(item);
+    public void removeClothing(Clothing clothing) {
+        clothes.remove(clothing);
     }
 
-    public void removeClothes(Clothes item) {
-        clothes.remove(item);
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -44,19 +42,28 @@ public class User {
         this.name = name;
     }
 
-    public int getAge() {
+    public short getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(short age) {
         this.age = age;
     }
 
-    public List<Clothes> getClothes() {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<Clothing> getClothes() {
         return clothes;
     }
 
-    public void setClothes(List<Clothes> clothes) {
+    public void setClothes(Set<Clothing> clothes) {
         this.clothes = clothes;
     }
+
 }
