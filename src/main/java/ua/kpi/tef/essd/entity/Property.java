@@ -19,16 +19,26 @@ public class Property {
 
     private String value;
 
-    @ManyToMany(mappedBy = "properties")
+    @ManyToMany(mappedBy = "properties", cascade = CascadeType.ALL)
     private Set<Part> parts = new HashSet<>();
 
+    public Property() { }
+
+    public Property(String name, String value, Set<Part> parts) {
+        this.name = name;
+        this.value = value;
+        if(parts != null)
+            parts.forEach(this::addPart);
+    }
+
     public void addPart(Part part) {
-        part.addProperty(this);
-        parts.add(part);
+        part.getProperties().add(this);
+        this.parts.add(part);
     }
 
     public void removePart(Part part) {
-        parts.remove(part);
+        part.getProperties().remove(this);
+        this.parts.remove(part);
     }
 
     public Integer getId() {
@@ -59,4 +69,12 @@ public class Property {
         this.parts = parts;
     }
 
+    @Override
+    public String toString() {
+        return "Property{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }
