@@ -14,6 +14,8 @@
         <class>ua.kpi.tef.essd.entity.Clothing</class>
         <class>ua.kpi.tef.essd.entity.Part</class>
         <class>ua.kpi.tef.essd.entity.Property</class>
+        <class>ua.kpi.tef.essd.entity.ClothingPart</class>
+        <class>ua.kpi.tef.essd.entity.ClothingPartKey</class>
 
         <properties>
             <property name="hibernate.connection.driver" value="com.mysql.jdbc.Driver"/>
@@ -22,7 +24,7 @@
             <property name="hibernate.connection.password" value="CDUa*D?aGpHs87/"/>
             <property name="hibernate.connection.autocommit" value="false"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>
         </properties>
 

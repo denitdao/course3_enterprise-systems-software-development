@@ -2,7 +2,6 @@ package ua.kpi.tef.essd.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,20 +13,30 @@ public class User {
 
     private String name;
 
-    private short age;
+    private Integer age;
 
     private String description;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Clothing> clothes = new HashSet<>();
 
+    public User() { }
+
+    public User(String name, Integer age, String description, Set<Clothing> clothes) {
+        this.name = name;
+        this.age = age;
+        this.description = description;
+        if(clothes != null)
+            clothes.forEach(this::addClothing);
+    }
+
     public void addClothing(Clothing clothing){
         clothing.setUser(this);
-        clothes.add(clothing);
+        this.clothes.add(clothing);
     }
 
     public void removeClothing(Clothing clothing) {
-        clothes.remove(clothing);
+        this.clothes.remove(clothing);
     }
 
     public Integer getId() {
@@ -42,11 +51,11 @@ public class User {
         this.name = name;
     }
 
-    public short getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(short age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
