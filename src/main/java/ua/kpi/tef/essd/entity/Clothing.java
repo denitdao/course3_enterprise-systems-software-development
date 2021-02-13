@@ -2,7 +2,9 @@ package ua.kpi.tef.essd.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "clothes")
@@ -19,12 +21,8 @@ public class Clothing {
     @Enumerated(EnumType.ORDINAL)
     private Size size;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "clothing_part",
-            joinColumns = @JoinColumn(name = "clothing_id"),
-            inverseJoinColumns = @JoinColumn(name = "part_id"))
-    private Set<Part> parts = new HashSet<>();
+    @OneToMany(mappedBy = "clothing", cascade = CascadeType.ALL)
+    private Set<ClothingPart> parts = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -34,13 +32,32 @@ public class Clothing {
     @JoinColumn(name = "clothes_set_id")
     private ClothesSet clothesSet;
 
-    public void addPart(Part part) {
-        part.addClothing(this);
-        parts.add(part);
+    public Clothing() { }
+
+    public Clothing(String name, Type type, Size size, User user) {
+        this.name = name;
+        this.type = type;
+        this.size = size;
+        this.user = user;
+    }
+
+    public void addPart(Part part, Integer amount) {
+        ClothingPart clothingPart = new ClothingPart(this, part, amount);
+        this.parts.add(clothingPart);
+        part.getClothes().add(clothingPart);
     }
 
     public void removePart(Part part) {
-        parts.remove(part);
+        for (Iterator<ClothingPart> iterator = parts.iterator(); iterator.hasNext(); ) {
+            ClothingPart clothingPart = iterator.next();
+            if (clothingPart.getClothing().equals(this) && clothingPart.getPart().equals(part)) {
+                iterator.remove(); // remove that part from clothing
+                clothingPart.getPart().getClothes().remove(clothingPart); // remove clothing form that part
+                clothingPart.setClothing(null);
+                clothingPart.setPart(null);
+                clothingPart.setAmount(null);
+            }
+        }
     }
 
     public Integer getId() {
@@ -71,11 +88,11 @@ public class Clothing {
         this.size = size;
     }
 
-    public Set<Part> getParts() {
+    public Set<ClothingPart> getParts() {
         return parts;
     }
 
-    public void setParts(Set<Part> parts) {
+    public void setParts(Set<ClothingPart> parts) {
         this.parts = parts;
     }
 
@@ -95,4 +112,16 @@ public class Clothing {
         this.clothesSet = clothesSet;
     }
 
+    @Override
+    public String toString() {
+        return "Clothing{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                ", size=" + size +
+                ", parts={" + parts.stream().map(c -> c.getPart().getName() + " (" + c.getAmount() + ")").collect(Collectors.joining(" | ")) +
+                "}, user=" + user.getName() +
+                ", clothesSet=" + ((clothesSet != null) ? clothesSet.getName() : "none") +
+                '}';
+    }
 }
