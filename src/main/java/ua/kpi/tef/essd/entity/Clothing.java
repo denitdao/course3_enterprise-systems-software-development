@@ -32,7 +32,8 @@ public class Clothing {
     @JoinColumn(name = "clothes_set_id")
     private ClothesSet clothesSet;
 
-    public Clothing() { }
+    public Clothing() {
+    }
 
     public Clothing(String name, Type type, Size size, User user) {
         this.name = name;

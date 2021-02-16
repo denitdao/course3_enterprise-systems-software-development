@@ -15,7 +15,11 @@ public class ClothesSet {
     @OneToMany(mappedBy = "clothesSet", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Clothing> clothesSet;
 
-    public void addClothing(Clothing clothing){
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public void addClothing(Clothing clothing) {
         clothing.setClothesSet(this);
         clothesSet.add(clothing);
     }
@@ -42,5 +46,13 @@ public class ClothesSet {
 
     public void setClothesSet(Set<Clothing> clothesSet) {
         this.clothesSet = clothesSet;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

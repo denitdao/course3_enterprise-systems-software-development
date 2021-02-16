@@ -20,23 +20,38 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Clothing> clothes = new HashSet<>();
 
-    public User() { }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ClothesSet> clothesSets = new HashSet<>();
 
-    public User(String name, Integer age, String description, Set<Clothing> clothes) {
+    public User() {
+    }
+
+    public User(String name, Integer age, String description, Set<Clothing> clothes, Set<ClothesSet> clothesSets) {
         this.name = name;
         this.age = age;
         this.description = description;
-        if(clothes != null)
+        if (clothes != null)
             clothes.forEach(this::addClothing);
+        if (clothesSets != null)
+            clothesSets.forEach(this::addClothesSet);
     }
 
-    public void addClothing(Clothing clothing){
+    public void addClothing(Clothing clothing) {
         clothing.setUser(this);
         this.clothes.add(clothing);
     }
 
     public void removeClothing(Clothing clothing) {
         this.clothes.remove(clothing);
+    }
+
+    public void addClothesSet(ClothesSet clothesSet) {
+        clothesSet.setUser(this);
+        this.clothesSets.add(clothesSet);
+    }
+
+    public void removeClothesSet(ClothesSet clothesSet) {
+        this.clothesSets.remove(clothesSet);
     }
 
     public Integer getId() {
@@ -75,4 +90,11 @@ public class User {
         this.clothes = clothes;
     }
 
+    public Set<ClothesSet> getClothesSets() {
+        return clothesSets;
+    }
+
+    public void setClothesSets(Set<ClothesSet> clothesSets) {
+        this.clothesSets = clothesSets;
+    }
 }

@@ -15,6 +15,7 @@ public class Part {
 
     private String name;
 
+    // inserts properties itself
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "part_property",
@@ -22,7 +23,8 @@ public class Part {
             inverseJoinColumns = @JoinColumn(name = "property_id"))
     private Set<Property> properties = new HashSet<>();
 
-    @OneToMany(mappedBy = "part", cascade = CascadeType.ALL)
+    // have to manually add clothes to the table
+    @OneToMany(mappedBy = "part", cascade = CascadeType.MERGE)
     private Set<ClothingPart> clothes = new HashSet<>();
 
     public Part() { }

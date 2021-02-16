@@ -9,12 +9,12 @@ public class ClothingPart {
     @EmbeddedId
     private ClothingPartKey id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("clothingId")
     @JoinColumn(name = "clothing_id")
     private Clothing clothing;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("partId")
     @JoinColumn(name = "part_id")
     private Part part;
