@@ -35,17 +35,18 @@ public class Clothing {
     public Clothing() {
     }
 
-    public Clothing(String name, Type type, Size size, User user) {
+    public Clothing(String name, Type type, Size size, User user, ClothesSet clothesSet) {
         this.name = name;
         this.type = type;
         this.size = size;
         this.user = user;
+        setClothesSet(clothesSet);
     }
 
     public void addPart(Part part, Integer amount) {
         ClothingPart clothingPart = new ClothingPart(this, part, amount);
-        this.parts.add(clothingPart);
         part.getClothes().add(clothingPart);
+        this.parts.add(clothingPart);
     }
 
     public void removePart(Part part) {

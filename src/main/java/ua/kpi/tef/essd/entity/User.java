@@ -3,6 +3,7 @@ package ua.kpi.tef.essd.entity;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -30,10 +31,8 @@ public class User {
         this.name = name;
         this.age = age;
         this.description = description;
-        if (clothes != null)
-            clothes.forEach(this::addClothing);
-        if (clothesSets != null)
-            clothesSets.forEach(this::addClothesSet);
+        setClothes(clothes);
+        setClothesSets(clothesSets);
     }
 
     public void addClothing(Clothing clothing) {
@@ -42,6 +41,7 @@ public class User {
     }
 
     public void removeClothing(Clothing clothing) {
+        clothing.setUser(null);
         this.clothes.remove(clothing);
     }
 
@@ -51,6 +51,7 @@ public class User {
     }
 
     public void removeClothesSet(ClothesSet clothesSet) {
+        clothesSet.setUser(null);
         this.clothesSets.remove(clothesSet);
     }
 
@@ -87,7 +88,8 @@ public class User {
     }
 
     public void setClothes(Set<Clothing> clothes) {
-        this.clothes = clothes;
+        if (clothes != null)
+            clothes.forEach(this::addClothing);
     }
 
     public Set<ClothesSet> getClothesSets() {
@@ -95,6 +97,19 @@ public class User {
     }
 
     public void setClothesSets(Set<ClothesSet> clothesSets) {
-        this.clothesSets = clothesSets;
+        if (clothesSets != null)
+            clothesSets.forEach(this::addClothesSet);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", description='" + description + '\'' +
+                ", clothes={" + clothes.stream().map(Clothing::getName).collect(Collectors.joining(" | ")) +
+                "}, clothesSets={" + clothesSets.stream().map(ClothesSet::getName).collect(Collectors.joining(" | ")) +
+                "}}";
     }
 }

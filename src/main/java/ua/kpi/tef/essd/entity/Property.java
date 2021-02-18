@@ -27,8 +27,7 @@ public class Property {
     public Property(String name, String value, Set<Part> parts) {
         this.name = name;
         this.value = value;
-        if(parts != null)
-            parts.forEach(this::addPart);
+        setParts(parts);
     }
 
     public void addPart(Part part) {
@@ -66,7 +65,8 @@ public class Property {
     }
 
     public void setParts(Set<Part> parts) {
-        this.parts = parts;
+        if(parts != null)
+            parts.forEach(this::addPart);
     }
 
     @Override
