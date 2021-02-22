@@ -3,6 +3,7 @@ package ua.kpi.tef.essd.entity;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -20,23 +21,38 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Clothing> clothes = new HashSet<>();
 
-    public User() { }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ClothesSet> clothesSets = new HashSet<>();
 
-    public User(String name, Integer age, String description, Set<Clothing> clothes) {
+    public User() {
+    }
+
+    public User(String name, Integer age, String description, Set<Clothing> clothes, Set<ClothesSet> clothesSets) {
         this.name = name;
         this.age = age;
         this.description = description;
-        if(clothes != null)
-            clothes.forEach(this::addClothing);
+        setClothes(clothes);
+        setClothesSets(clothesSets);
     }
 
-    public void addClothing(Clothing clothing){
-        clothing.setUser(this);
+    public void addClothing(Clothing clothing) {
         this.clothes.add(clothing);
+        clothing.setUser(this);
     }
 
     public void removeClothing(Clothing clothing) {
         this.clothes.remove(clothing);
+        clothing.setUser(null);
+    }
+
+    public void addClothesSet(ClothesSet clothesSet) {
+        this.clothesSets.add(clothesSet);
+        clothesSet.setUser(this);
+    }
+
+    public void removeClothesSet(ClothesSet clothesSet) {
+        this.clothesSets.remove(clothesSet);
+        clothesSet.setUser(null);
     }
 
     public Integer getId() {
@@ -72,7 +88,28 @@ public class User {
     }
 
     public void setClothes(Set<Clothing> clothes) {
-        this.clothes = clothes;
+        if (clothes != null)
+            clothes.forEach(this::addClothing);
     }
 
+    public Set<ClothesSet> getClothesSets() {
+        return clothesSets;
+    }
+
+    public void setClothesSets(Set<ClothesSet> clothesSets) {
+        if (clothesSets != null)
+            clothesSets.forEach(this::addClothesSet);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", description='" + description + '\'' +
+                ", clothes={" + clothes.stream().map(Clothing::getName).collect(Collectors.joining(" | ")) +
+                "}, clothesSets={" + clothesSets.stream().map(ClothesSet::getName).collect(Collectors.joining(" | ")) +
+                "}}";
+    }
 }

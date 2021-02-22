@@ -32,13 +32,15 @@ public class Clothing {
     @JoinColumn(name = "clothes_set_id")
     private ClothesSet clothesSet;
 
-    public Clothing() { }
+    public Clothing() {
+    }
 
-    public Clothing(String name, Type type, Size size, User user) {
+    public Clothing(String name, Type type, Size size, User user, ClothesSet clothesSet) {
         this.name = name;
         this.type = type;
         this.size = size;
         this.user = user;
+        setClothesSet(clothesSet);
     }
 
     public void addPart(Part part, Integer amount) {

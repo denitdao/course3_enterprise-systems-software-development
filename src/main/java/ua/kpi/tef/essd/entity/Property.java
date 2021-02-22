@@ -27,18 +27,17 @@ public class Property {
     public Property(String name, String value, Set<Part> parts) {
         this.name = name;
         this.value = value;
-        if(parts != null)
-            parts.forEach(this::addPart);
+        setParts(parts);
     }
 
     public void addPart(Part part) {
-        part.getProperties().add(this);
         this.parts.add(part);
+        part.getProperties().add(this);
     }
 
     public void removePart(Part part) {
-        part.getProperties().remove(this);
         this.parts.remove(part);
+        part.getProperties().remove(this);
     }
 
     public Integer getId() {
@@ -66,7 +65,8 @@ public class Property {
     }
 
     public void setParts(Set<Part> parts) {
-        this.parts = parts;
+        if(parts != null)
+            parts.forEach(this::addPart);
     }
 
     @Override
