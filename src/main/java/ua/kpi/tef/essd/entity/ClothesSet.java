@@ -30,13 +30,13 @@ public class ClothesSet {
     }
 
     public void addClothing(Clothing clothing) {
-        clothing.setClothesSet(this);
         this.setOfClothes.add(clothing);
+        clothing.setClothesSet(this);
     }
 
     public void removeClothing(Clothing clothing) {
-        clothing.setClothesSet(null);
         this.setOfClothes.remove(clothing);
+        clothing.setClothesSet(null);
     }
 
     public Integer getId() {

@@ -36,19 +36,19 @@ public class Part {
     }
 
     public void addProperty(Property property) {
-        property.getParts().add(this);
         this.properties.add(property);
+        property.getParts().add(this);
     }
 
     public void removeProperty(Property property) {
-        property.getParts().remove(this);
         properties.remove(property);
+        property.getParts().remove(this);
     }
 
     public void addClothing(Clothing clothing, Integer amount) {
         ClothingPart clothingPart = new ClothingPart(clothing, this, amount);
-        clothing.getParts().add(clothingPart);
         this.clothes.add(clothingPart);
+        clothing.getParts().add(clothingPart);
     }
 
     public void removeClothing(Clothing clothing) {

@@ -36,23 +36,23 @@ public class User {
     }
 
     public void addClothing(Clothing clothing) {
-        clothing.setUser(this);
         this.clothes.add(clothing);
+        clothing.setUser(this);
     }
 
     public void removeClothing(Clothing clothing) {
-        clothing.setUser(null);
         this.clothes.remove(clothing);
+        clothing.setUser(null);
     }
 
     public void addClothesSet(ClothesSet clothesSet) {
-        clothesSet.setUser(this);
         this.clothesSets.add(clothesSet);
+        clothesSet.setUser(this);
     }
 
     public void removeClothesSet(ClothesSet clothesSet) {
-        clothesSet.setUser(null);
         this.clothesSets.remove(clothesSet);
+        clothesSet.setUser(null);
     }
 
     public Integer getId() {

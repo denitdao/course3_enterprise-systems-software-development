@@ -31,13 +31,13 @@ public class Property {
     }
 
     public void addPart(Part part) {
-        part.getProperties().add(this);
         this.parts.add(part);
+        part.getProperties().add(this);
     }
 
     public void removePart(Part part) {
-        part.getProperties().remove(this);
         this.parts.remove(part);
+        part.getProperties().remove(this);
     }
 
     public Integer getId() {

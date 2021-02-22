@@ -45,8 +45,8 @@ public class Clothing {
 
     public void addPart(Part part, Integer amount) {
         ClothingPart clothingPart = new ClothingPart(this, part, amount);
-        part.getClothes().add(clothingPart);
         this.parts.add(clothingPart);
+        part.getClothes().add(clothingPart);
     }
 
     public void removePart(Part part) {
