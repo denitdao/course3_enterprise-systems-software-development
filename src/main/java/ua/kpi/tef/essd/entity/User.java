@@ -27,6 +27,12 @@ public class User {
     public User() {
     }
 
+    public User(String name, Integer age, String description) {
+        this.name = name;
+        this.age = age;
+        this.description = description;
+    }
+
     public User(String name, Integer age, String description, Set<Clothing> clothes, Set<ClothesSet> clothesSets) {
         this.name = name;
         this.age = age;

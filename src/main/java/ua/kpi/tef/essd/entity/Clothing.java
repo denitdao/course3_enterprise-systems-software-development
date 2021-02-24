@@ -21,7 +21,7 @@ public class Clothing {
     @Enumerated(EnumType.ORDINAL)
     private Size size;
 
-    @OneToMany(mappedBy = "clothing", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clothing", cascade = CascadeType.MERGE)
     private Set<ClothingPart> parts = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,6 +33,13 @@ public class Clothing {
     private ClothesSet clothesSet;
 
     public Clothing() {
+    }
+
+    public Clothing(String name, Type type, Size size, User user) {
+        this.name = name;
+        this.type = type;
+        this.size = size;
+        this.user = user;
     }
 
     public Clothing(String name, Type type, Size size, User user, ClothesSet clothesSet) {
