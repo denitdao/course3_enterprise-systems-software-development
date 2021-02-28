@@ -1,9 +1,11 @@
 package ua.kpi.tef.essd.dao;
 
+import org.springframework.stereotype.Component;
 import ua.kpi.tef.essd.entity.Part;
 
 import java.util.List;
 
+@Component
 public class PartDao extends GenericDao<Part> {
 
     public PartDao() {

@@ -1,11 +1,13 @@
 package ua.kpi.tef.essd.dao;
 
+import org.springframework.stereotype.Component;
 import ua.kpi.tef.essd.entity.Clothing;
 import ua.kpi.tef.essd.entity.Size;
 import ua.kpi.tef.essd.entity.Type;
 
 import java.util.List;
 
+@Component
 public class ClothingDao extends GenericDao<Clothing> {
 
     public ClothingDao() {
@@ -32,4 +34,5 @@ public class ClothingDao extends GenericDao<Clothing> {
                 .setParameter("type", type)
                 .getResultList();
     }
+
 }
