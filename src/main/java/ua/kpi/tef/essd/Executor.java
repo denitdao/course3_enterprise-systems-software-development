@@ -28,10 +28,10 @@ public class Executor {
         clothesSetController.createClothesSet(user.getId(), clothesSet);
         clothingController.addClothingToSet(clothesSet.getId(), clothing.getId());
 
-        System.out.println("\n" + userController.getUserInfo(user.getId()) + "\n");
-        System.out.println("\n" + clothingController.getClothingInfo(clothing.getId()) + "\n");
-        System.out.println("\n" + clothesSetController.getClothesSetInfo(clothesSet.getId()) + "\n");
-        System.out.println(clothesSetController.getClothesSetWithClothing(clothing.getId()));
+            System.out.println("\n" + userController.getUserInfo(user.getId()) + "\n");
+            System.out.println("\n" + clothingController.getClothingInfo(clothing.getId()) + "\n");
+            System.out.println("\n" + clothesSetController.getClothesSetInfo(clothesSet.getId()) + "\n");
+            System.out.println(clothesSetController.getClothesSetWithClothing(clothing.getId()));
 
         context.close();
     }
