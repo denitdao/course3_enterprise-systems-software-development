@@ -18,11 +18,11 @@ public class Executor {
 
         User user = new User("Tester", 10, "nothing interesting");
         Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S);
-        ClothesSet clothesSet = new ClothesSet("Testers set", null);
+        ClothesSet clothesSet = new ClothesSet("Tester's set", null);
 
         userController.createUser(user);
 
-        System.out.println("\n" + userController.getUserInfo(user.getId()) + "\n");
+            System.out.println("\n" + userController.getUserInfo(user.getId()) + "\n");
 
         clothingController.createClothing(user.getId(), clothing);
         clothesSetController.createClothesSet(user.getId(), clothesSet);
