@@ -1,11 +1,14 @@
 package ua.kpi.tef.essd.dao;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ua.kpi.tef.essd.entity.Clothing;
 import ua.kpi.tef.essd.entity.Size;
 import ua.kpi.tef.essd.entity.Type;
 
 import java.util.List;
 
+@Repository
 public class ClothingDao extends GenericDao<Clothing> {
 
     public ClothingDao() {
@@ -15,7 +18,7 @@ public class ClothingDao extends GenericDao<Clothing> {
     public List<Clothing> findByName(String name) {
         return entityManager
                 .createQuery("select c from Clothing c where c.name like :name", Clothing.class)
-                .setParameter("name", name+'%')
+                .setParameter("name", name + '%')
                 .getResultList();
     }
 
@@ -32,4 +35,5 @@ public class ClothingDao extends GenericDao<Clothing> {
                 .setParameter("type", type)
                 .getResultList();
     }
+
 }

@@ -1,9 +1,12 @@
 package ua.kpi.tef.essd.dao;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ua.kpi.tef.essd.entity.Property;
 
 import java.util.List;
 
+@Repository
 public class PropertyDao extends GenericDao<Property> {
 
     public PropertyDao() {

@@ -22,10 +22,18 @@
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/clothes_designer"/>
             <property name="hibernate.connection.user" value="clothes_designer_app"/>
             <property name="hibernate.connection.password" value="CDUa*D?aGpHs87/"/>
-            <property name="hibernate.connection.autocommit" value="false"/>
+<!--            <property name="hibernate.connection.autocommit" value="false"/>-->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.hbm2ddl.import_files"
+                      value="/database_dump/properties.sql,
+                            /database_dump/parts.sql,
+                            /database_dump/part_property.sql,
+                            /database_dump/users.sql,
+                            /database_dump/clothes_sets.sql,
+                            /database_dump/clothes.sql,
+                            /database_dump/clothing_part.sql"/>
         </properties>
 
     </persistence-unit>

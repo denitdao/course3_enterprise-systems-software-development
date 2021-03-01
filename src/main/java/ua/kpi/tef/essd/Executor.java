@@ -1,37 +1,38 @@
 package ua.kpi.tef.essd;
 
-import ua.kpi.tef.essd.dao.ClothingDao;
-import ua.kpi.tef.essd.dao.PropertyDao;
-import ua.kpi.tef.essd.dao.UserDao;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ua.kpi.tef.essd.config.ApplicationConfiguration;
+import ua.kpi.tef.essd.controller.ClothesSetController;
+import ua.kpi.tef.essd.controller.ClothingController;
+import ua.kpi.tef.essd.controller.UserController;
 import ua.kpi.tef.essd.entity.*;
-
-import java.util.Set;
 
 public class Executor {
 
     public static void main(String[] args) {
-        ClothingDao clothingDao = new ClothingDao();
-        UserDao userDao = new UserDao();
-        PropertyDao propertyDao = new PropertyDao();
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
 
-        Property property1 = new Property("Color", "Blue", null);
-        Property property2 = new Property("Material", "Cotton", null);
+        ClothingController clothingController = context.getBean(ClothingController.class);
+        UserController userController = context.getBean(UserController.class);
+        ClothesSetController clothesSetController = context.getBean(ClothesSetController.class);
 
-        Part part = new Part("Part 1", Set.of(property1, property2));
+        User user = new User("Tester", 10, "nothing interesting");
+        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S);
+        ClothesSet clothesSet = new ClothesSet("Testers set", null);
 
-        Clothing clothing = new Clothing("Clothing 1", Type.MAN, Size.S, null, null);
-        clothing.addPart(part, 3);
-        clothingDao.save(clothing);
+        userController.createUser(user);
 
-        ClothesSet clothesSet = new ClothesSet("Set 1", Set.of(clothing), null);
+        System.out.println("\n" + userController.getUserInfo(user.getId()) + "\n");
 
-        User user = new User("User name", 19, "about me", Set.of(clothing), Set.of(clothesSet));
+        clothingController.createClothing(user.getId(), clothing);
+        clothesSetController.createClothesSet(user.getId(), clothesSet);
+        clothingController.addClothingToSet(clothesSet.getId(), clothing.getId());
 
-        userDao.update(user);
+        System.out.println("\n" + userController.getUserInfo(user.getId()) + "\n");
+        System.out.println("\n" + clothingController.getClothingInfo(clothing.getId()) + "\n");
+        System.out.println("\n" + clothesSetController.getClothesSetInfo(clothesSet.getId()) + "\n");
+        System.out.println(clothesSetController.getClothesSetWithClothing(clothing.getId()));
 
-        System.out.println(userDao.findById(1));
-        System.out.println(clothingDao.findBySize(Size.S));
-        System.out.println(propertyDao.findByValue("Blue"));
-        System.out.println(propertyDao.findByNameAndValue("", ""));
+        context.close();
     }
 }

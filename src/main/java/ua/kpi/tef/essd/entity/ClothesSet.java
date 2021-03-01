@@ -2,6 +2,8 @@ package ua.kpi.tef.essd.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,7 +16,7 @@ public class ClothesSet {
     private String name;
 
     @OneToMany(mappedBy = "clothesSet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Clothing> setOfClothes = new HashSet<>();
+    private final List<Clothing> setOfClothes = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -23,7 +25,12 @@ public class ClothesSet {
     public ClothesSet() {
     }
 
-    public ClothesSet(String name, Set<Clothing> setOfClothes, User user) {
+    public ClothesSet(String name, List<Clothing> setOfClothes) {
+        this.name = name;
+        setSetOfClothes(setOfClothes);
+    }
+
+    public ClothesSet(String name, List<Clothing> setOfClothes, User user) {
         this.name = name;
         setSetOfClothes(setOfClothes);
         this.user = user;
@@ -51,11 +58,11 @@ public class ClothesSet {
         this.name = name;
     }
 
-    public Set<Clothing> getSetOfClothes() {
+    public List<Clothing> getSetOfClothes() {
         return setOfClothes;
     }
 
-    public void setSetOfClothes(Set<Clothing> setOfClothes) {
+    public void setSetOfClothes(List<Clothing> setOfClothes) {
         if(setOfClothes != null)
             setOfClothes.forEach(this::addClothing);
     }
