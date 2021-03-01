@@ -25,6 +25,11 @@ public class ClothesSet {
     public ClothesSet() {
     }
 
+    public ClothesSet(String name, List<Clothing> setOfClothes) {
+        this.name = name;
+        setSetOfClothes(setOfClothes);
+    }
+
     public ClothesSet(String name, List<Clothing> setOfClothes, User user) {
         this.name = name;
         setSetOfClothes(setOfClothes);

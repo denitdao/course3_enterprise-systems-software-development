@@ -1,6 +1,7 @@
 package ua.kpi.tef.essd.service;
 
 import ua.kpi.tef.essd.entity.ClothesSet;
+import ua.kpi.tef.essd.entity.Clothing;
 import ua.kpi.tef.essd.entity.User;
 
 import java.util.List;
@@ -15,7 +16,9 @@ public interface ClothesSetService {
 
     List<ClothesSet> getClothesSetsOfUser(User user);
 
-    String getClothesSetInfo(ClothesSet clothesSet);
+    ClothesSet getClothesSetOfClothing(Clothing clothing);
+
+    String getClothesSetInfo(Integer clothesSetId);
 
     ClothesSet updateClothesSet(ClothesSet clothesSet);
 
