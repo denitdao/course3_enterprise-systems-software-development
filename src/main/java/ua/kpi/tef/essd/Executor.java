@@ -1,37 +1,30 @@
 package ua.kpi.tef.essd;
 
-import ua.kpi.tef.essd.dao.ClothingDao;
-import ua.kpi.tef.essd.dao.PropertyDao;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ua.kpi.tef.essd.config.ApplicationConfiguration;
+import ua.kpi.tef.essd.controller.UserController;
 import ua.kpi.tef.essd.dao.UserDao;
 import ua.kpi.tef.essd.entity.*;
-
-import java.util.Set;
+import ua.kpi.tef.essd.service.UserService;
 
 public class Executor {
 
     public static void main(String[] args) {
-        ClothingDao clothingDao = new ClothingDao();
-        UserDao userDao = new UserDao();
-        PropertyDao propertyDao = new PropertyDao();
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
 
-        Property property1 = new Property("Color", "Blue", null);
-        Property property2 = new Property("Material", "Cotton", null);
+        UserDao userDao = context.getBean(UserDao.class);
+        UserService userService = context.getBean(UserService.class);
+        UserController userController = context.getBean(UserController.class);
 
-        Part part = new Part("Part 1", Set.of(property1, property2));
+        User user = new User("Tester", 10, "nothing interesting");
+        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S);
 
-        Clothing clothing = new Clothing("Clothing 1", Type.MAN, Size.S, null, null);
-        clothing.addPart(part, 3);
-        clothingDao.save(clothing);
+        System.out.println(userController.getUserInfo(1));
 
-        ClothesSet clothesSet = new ClothesSet("Set 1", Set.of(clothing), null);
+        context.close();
 
-        User user = new User("User name", 19, "about me", Set.of(clothing), Set.of(clothesSet));
-
-        userDao.update(user);
-
-        System.out.println(userDao.findById(1));
-        System.out.println(clothingDao.findBySize(Size.S));
-        System.out.println(propertyDao.findByValue("Blue"));
-        System.out.println(propertyDao.findByNameAndValue("", ""));
+        /*userService.createUser(user);
+        ClothingController clothingController = new ClothingController();
+        clothingController.createClothing(user.getId(), clothing);*/
     }
 }

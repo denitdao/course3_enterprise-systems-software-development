@@ -1,12 +1,16 @@
 package ua.kpi.tef.essd.entity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +22,11 @@ public class User {
 
     private String description;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Clothing> clothes = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private final List<Clothing> clothes = new LinkedList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ClothesSet> clothesSets = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private final List<ClothesSet> clothesSets = new LinkedList<>();
 
     public User() {
     }
@@ -33,7 +37,7 @@ public class User {
         this.description = description;
     }
 
-    public User(String name, Integer age, String description, Set<Clothing> clothes, Set<ClothesSet> clothesSets) {
+    public User(String name, Integer age, String description, List<Clothing> clothes, List<ClothesSet> clothesSets) {
         this.name = name;
         this.age = age;
         this.description = description;
@@ -41,21 +45,33 @@ public class User {
         setClothesSets(clothesSets);
     }
 
+    /**
+     * Link both Clothing and User to each-other
+     */
     public void addClothing(Clothing clothing) {
         this.clothes.add(clothing);
         clothing.setUser(this);
     }
 
+    /**
+     * Unlink both Clothing and User from each-other
+     */
     public void removeClothing(Clothing clothing) {
         this.clothes.remove(clothing);
         clothing.setUser(null);
     }
 
+    /**
+     * Link both ClothesSet and User to each-other
+     */
     public void addClothesSet(ClothesSet clothesSet) {
         this.clothesSets.add(clothesSet);
         clothesSet.setUser(this);
     }
 
+    /**
+     * Unlink both ClothesSet and User from each-other
+     */
     public void removeClothesSet(ClothesSet clothesSet) {
         this.clothesSets.remove(clothesSet);
         clothesSet.setUser(null);
@@ -89,20 +105,20 @@ public class User {
         this.description = description;
     }
 
-    public Set<Clothing> getClothes() {
+    public List<Clothing> getClothes() {
         return clothes;
     }
 
-    public void setClothes(Set<Clothing> clothes) {
+    public void setClothes(List<Clothing> clothes) {
         if (clothes != null)
             clothes.forEach(this::addClothing);
     }
 
-    public Set<ClothesSet> getClothesSets() {
+    public List<ClothesSet> getClothesSets() {
         return clothesSets;
     }
 
-    public void setClothesSets(Set<ClothesSet> clothesSets) {
+    public void setClothesSets(List<ClothesSet> clothesSets) {
         if (clothesSets != null)
             clothesSets.forEach(this::addClothesSet);
     }

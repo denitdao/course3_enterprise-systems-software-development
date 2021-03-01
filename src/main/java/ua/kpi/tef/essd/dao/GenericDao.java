@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Repository
 public abstract class GenericDao<T> {
     private final Class<T> clazz;
 
@@ -25,8 +24,7 @@ public abstract class GenericDao<T> {
      * Update and get synchronized instance
      */
     public T update(T entity) {
-        T merged = entityManager.merge(entity);
-        return merged;
+        return entityManager.merge(entity);
     }
 
     public T findById(Integer id) {

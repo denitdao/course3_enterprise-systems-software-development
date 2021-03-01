@@ -35,6 +35,12 @@ public class Clothing {
     public Clothing() {
     }
 
+    public Clothing(String name, Type type, Size size) {
+        this.name = name;
+        this.type = type;
+        this.size = size;
+    }
+
     public Clothing(String name, Type type, Size size, User user) {
         this.name = name;
         this.type = type;
