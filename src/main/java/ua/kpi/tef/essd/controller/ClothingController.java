@@ -2,12 +2,11 @@ package ua.kpi.tef.essd.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import ua.kpi.tef.essd.entity.ClothesSet;
 import ua.kpi.tef.essd.entity.Clothing;
-import ua.kpi.tef.essd.entity.User;
 import ua.kpi.tef.essd.service.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Use this controller to get or update Clothes.
@@ -16,35 +15,30 @@ import java.util.List;
 public class ClothingController {
 
     @Autowired
-    private ClothesSetService clothesSetService;
-
-    @Autowired
     private ClothingService clothingService;
 
     @Autowired
-    private UserService userService;
+    private Validator validator;
 
-    public void createClothing(Integer userId, Clothing clothing) {
-        User user = userService.getUser(userId);
-        if(user != null) {
-            clothingService.saveClothingOfUser(clothing, user);
-        } else {
-            System.out.println("no user with that id");
-        }
+    public void createClothing(Integer userId, Clothing clothing) throws RuntimeException {
+        if (validator.validateUser(userId)) {
+            clothingService.saveClothingOfUser(userId, clothing);
+        } else
+            throw new NoSuchElementException("No user with specified id=" + userId + " found");
     }
 
-    public Clothing getClothingById(Integer clothingId) {
-        return clothingService.getClothing(clothingId);
+    public Clothing getClothingById(Integer clothingId) throws RuntimeException {
+        if (validator.validateClothing(clothingId)) {
+            return clothingService.getClothing(clothingId);
+        } else
+            throw new NoSuchElementException("No clothing with specified id=" + clothingId + " found");
     }
 
     public List<Clothing> getClothesOfUser(Integer userId) {
-        User user = userService.getUser(userId);
-        if(user != null) {
-            return clothingService.getClothesOfUser(user);
-        } else {
-            System.out.println("no user with that id");
-            return null;
-        }
+        if (validator.validateUser(userId)) {
+            return clothingService.getClothesOfUser(userId);
+        } else
+            throw new NoSuchElementException("No user with specified id=" + userId + " found");
     }
 
     public String getClothingInfo(Integer clothingId) {
@@ -52,13 +46,11 @@ public class ClothingController {
     }
 
     public void addClothingToSet(Integer setId, Integer clothingId) {
-        ClothesSet clothesSet = clothesSetService.getClothesSets(setId);
-        Clothing clothing = clothingService.getClothing(clothingId);
-        if(clothesSet != null && clothing != null) {
-            clothingService.addClothingToSet(clothing, clothesSet);
-        } else {
-            System.out.println("No clothing / set with id");
-        }
+        if (!validator.validateClothesSet(setId))
+            throw new NoSuchElementException("No set with specified id=" + setId + " found");
+        if (!validator.validateClothing(clothingId))
+            throw new NoSuchElementException("No clothing with specified id=" + clothingId + " found");
+        clothingService.addClothingToSet(setId, clothingId);
     }
 
     public void updateClothing(Clothing clothing) {
@@ -66,10 +58,9 @@ public class ClothingController {
     }
 
     public void deleteClothing(Integer clothingId) {
-        Clothing clothing = clothingService.getClothing(clothingId);
-        if(clothing != null)
-            clothingService.deleteClothing(clothing);
-        else
-            System.out.println("wrong id");
+        if (validator.validateClothing(clothingId)) {
+            clothingService.deleteClothing(clothingId);
+        } else
+            throw new NoSuchElementException("No user with specified id=" + clothingId + " found");
     }
 }

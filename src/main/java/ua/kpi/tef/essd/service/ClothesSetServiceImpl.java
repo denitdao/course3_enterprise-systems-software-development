@@ -1,12 +1,9 @@
 package ua.kpi.tef.essd.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kpi.tef.essd.dao.ClothesSetDao;
-import ua.kpi.tef.essd.dao.ClothingDao;
-import ua.kpi.tef.essd.dao.UserDao;
 import ua.kpi.tef.essd.entity.ClothesSet;
 import ua.kpi.tef.essd.entity.Clothing;
 import ua.kpi.tef.essd.entity.User;
@@ -18,13 +15,41 @@ import java.util.List;
 public class ClothesSetServiceImpl implements ClothesSetService {
 
     @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private ClothingDao clothingDao;
-
-    @Autowired
     private ClothesSetDao clothesSetDao;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ClothingService clothingService;
+
+    @Override
+    @Transactional(readOnly = false)
+    public void saveClothesSetOfUser(Integer userId, ClothesSet clothesSet) {
+        userService.getUser(userId).addClothesSet(clothesSet);
+
+        clothesSetDao.save(clothesSet);
+    }
+
+    @Override
+    public List<ClothesSet> getClothesSetsOfUser(Integer userId) {
+        return userService.getUser(userId).getClothesSets();
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public ClothesSet getClothesSetOfClothing(Integer clothingId) {
+        ClothesSet clothesSet = clothingService.getClothing(clothingId).getClothesSet();
+        clothesSet.getName(); // lazy load all properties
+        return clothesSet;
+    }
+
+    @Override
+    public String getClothesSetInfo(Integer clothesSetId) {
+        return clothesSetDao.findById(clothesSetId).toString();
+    }
+
+//  ---- Simple CRUD methods ----
 
     @Override
     @Transactional(readOnly = false)
@@ -33,33 +58,8 @@ public class ClothesSetServiceImpl implements ClothesSetService {
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public void saveClothesSetOfUser(ClothesSet clothesSet, User user) {
-        userDao.update(user).addClothesSet(clothesSet);
-        clothesSetDao.save(clothesSet);
-    }
-
-    @Override
-    public ClothesSet getClothesSets(Integer id) {
+    public ClothesSet getClothesSet(Integer id) {
         return clothesSetDao.findById(id);
-    }
-
-    @Override
-    public List<ClothesSet> getClothesSetsOfUser(User user) {
-        return userDao.update(user).getClothesSets();
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public ClothesSet getClothesSetOfClothing(Clothing clothing) {
-        ClothesSet clothesSet = clothingDao.update(clothing).getClothesSet();
-        clothesSet.getName();
-        return clothesSet; // todo
-    }
-
-    @Override
-    public String getClothesSetInfo(Integer clothesSetId) {
-        return clothesSetDao.findById(clothesSetId).toString();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ClothesSetServiceImpl implements ClothesSetService {
 
     @Override
     @Transactional(readOnly = false)
-    public void deleteClothesSet(ClothesSet clothesSet) {
-        clothesSetDao.delete(clothesSet);
+    public void deleteClothesSet(Integer id) {
+        clothesSetDao.deleteById(id);
     }
 }

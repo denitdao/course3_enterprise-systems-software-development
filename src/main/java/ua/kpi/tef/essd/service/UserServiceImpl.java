@@ -17,11 +17,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private ClothingDao clothingDao;
+    @Override
+    public List<User> getAllUsers() {
+        return userDao.findAll();
+    }
 
-    @Autowired
-    private ClothesSetDao clothesSetDao;
+    @Override
+    public String getUserInfo(Integer userId) {
+        return userDao.findById(userId).toString();
+    }
+
+//  ---- Simple CRUD methods ----
 
     @Override
     @Transactional(readOnly = false)
@@ -32,16 +38,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(Integer id) {
         return userDao.findById(id);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userDao.findAll();
-    }
-
-    @Override
-    public String getUserInfo(Integer userId) {
-        return userDao.findById(userId).toString();
     }
 
     @Override

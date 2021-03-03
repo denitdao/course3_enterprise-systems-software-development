@@ -1,8 +1,6 @@
 package ua.kpi.tef.essd.service;
 
-import ua.kpi.tef.essd.entity.ClothesSet;
 import ua.kpi.tef.essd.entity.Clothing;
-import ua.kpi.tef.essd.entity.User;
 
 import java.util.List;
 
@@ -10,17 +8,17 @@ public interface ClothingService {
 
     void saveClothing(Clothing clothing);
 
-    void saveClothingOfUser(Clothing clothing, User user);
+    void saveClothingOfUser(Integer userId, Clothing clothing);
 
     Clothing getClothing(Integer id);
 
-    List<Clothing> getClothesOfUser(User user);
+    List<Clothing> getClothesOfUser(Integer userId);
 
     String getClothingInfo(Integer clothingId);
 
-    void addClothingToSet(Clothing clothing, ClothesSet clothesSet);
+    void addClothingToSet(Integer clothesSetId, Integer clothingId);
 
     Clothing updateClothing(Clothing clothing);
 
-    void deleteClothing(Clothing clothing);
+    void deleteClothing(Integer id);
 }

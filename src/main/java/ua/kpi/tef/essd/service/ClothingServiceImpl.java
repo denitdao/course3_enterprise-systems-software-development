@@ -1,15 +1,10 @@
 package ua.kpi.tef.essd.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.kpi.tef.essd.dao.ClothesSetDao;
 import ua.kpi.tef.essd.dao.ClothingDao;
-import ua.kpi.tef.essd.dao.UserDao;
-import ua.kpi.tef.essd.entity.ClothesSet;
 import ua.kpi.tef.essd.entity.Clothing;
-import ua.kpi.tef.essd.entity.User;
 
 import java.util.List;
 
@@ -18,35 +13,24 @@ import java.util.List;
 public class ClothingServiceImpl implements ClothingService {
 
     @Autowired
-    private UserDao userDao;
-
-    @Autowired
     private ClothingDao clothingDao;
 
     @Autowired
-    private ClothesSetDao clothesSetDao;
+    private UserService userService;
+
+    @Autowired
+    private ClothesSetService clothesSetService;
 
     @Override
     @Transactional(readOnly = false)
-    public void saveClothing(Clothing clothing) {
-        clothingDao.save(clothing);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void saveClothingOfUser(Clothing clothing, User user) {
-        userDao.update(user).addClothing(clothing); // connect user back to persistence and link clothing
+    public void saveClothingOfUser(Integer userId, Clothing clothing) {
+        userService.getUser(userId).addClothing(clothing); // get connected to persistence user and link clothing
         clothingDao.save(clothing); // insert clothing to the db
     }
 
     @Override
-    public Clothing getClothing(Integer id) {
-        return clothingDao.findById(id);
-    }
-
-    @Override
-    public List<Clothing> getClothesOfUser(User user) {
-        return user.getClothes();
+    public List<Clothing> getClothesOfUser(Integer userId) {
+        return userService.getUser(userId).getClothes();
     }
 
     @Override
@@ -56,9 +40,22 @@ public class ClothingServiceImpl implements ClothingService {
 
     @Override
     @Transactional(readOnly = false)
-    public void addClothingToSet(Clothing clothing, ClothesSet clothesSet) {
-        clothing = clothingDao.update(clothing);
-        clothesSetDao.update(clothesSet).addClothing(clothing);
+    public void addClothingToSet(Integer clothesSetId, Integer clothingId) {
+        Clothing clothing = clothingDao.findById(clothingId);
+        clothesSetService.getClothesSet(clothesSetId).addClothing(clothing);
+    }
+
+//  ---- Simple CRUD methods ----
+
+    @Override
+    @Transactional(readOnly = false)
+    public void saveClothing(Clothing clothing) {
+        clothingDao.save(clothing);
+    }
+
+    @Override
+    public Clothing getClothing(Integer id) {
+        return clothingDao.findById(id);
     }
 
     @Override
@@ -69,16 +66,8 @@ public class ClothingServiceImpl implements ClothingService {
 
     @Override
     @Transactional(readOnly = false)
-    public void deleteClothing(Clothing clothing) {
-        clothingDao.delete(clothing);
+    public void deleteClothing(Integer clothingId) {
+        clothingDao.deleteById(clothingId);
     }
-
-    /*@Override
-    @Transactional(readOnly = false)
-    public void createClothingForUser(Clothing clothing, User user) {
-        clothingDao.save(clothing); // save our clothing
-        userDao.update(user).addClothing(clothing); // update user
-        clothingDao.update(clothing);
-    }*/
 
 }
