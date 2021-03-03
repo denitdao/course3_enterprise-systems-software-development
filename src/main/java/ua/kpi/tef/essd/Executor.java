@@ -31,8 +31,17 @@ public class Executor {
             System.out.println("\n" + userController.getUserInfo(user.getId()) + "\n");
             System.out.println("\n" + clothingController.getClothingInfo(clothing.getId()) + "\n");
             System.out.println("\n" + clothesSetController.getClothesSetInfo(clothesSet.getId()) + "\n");
-            System.out.println(clothesSetController.getClothesSetWithClothing(clothing.getId()));
+            //System.out.println(clothesSetController.getClothesSetWithClothing(clothing.getId()));
 
         context.close();
     }
 }
+
+// clothing service is able to call user service methods
+// clothesSet service can call clothing service
+
+// layer uses can be vertical or horizontal
+
+// дизайнер - занимается созданием одежды (имеет свое описание)
+// пользователь - может просмотреть каталог и выбрать модели одежды от дизайнеров для заказа.
+// Заказ отправляется на

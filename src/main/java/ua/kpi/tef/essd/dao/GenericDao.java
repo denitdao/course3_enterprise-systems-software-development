@@ -43,4 +43,11 @@ public abstract class GenericDao<T> {
         entityManager.remove(findById(id));
     }
 
+    public boolean validate(Integer id) {
+        return !entityManager
+                .createQuery("select count(e) from " + clazz.getSimpleName() + " e where e.id = :id")
+                .setParameter("id", id)
+                .getSingleResult().equals(0L);
+    }
+
 }
