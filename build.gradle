@@ -13,9 +13,11 @@ dependencies {
     compile 'org.clojure:java.jdbc:0.7.12'
     compile 'org.hibernate:hibernate-core:5.4.28.Final'
     compile 'mysql:mysql-connector-java:8.0.23'
-    compileOnly 'org.projectlombok:lombok:1.18.18'
 
+    compileOnly 'org.projectlombok:lombok:1.18.18'
     annotationProcessor 'org.projectlombok:lombok:1.18.18'
+    testCompileOnly 'org.projectlombok:lombok:1.18.18'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.18'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.4.3'

@@ -10,6 +10,8 @@ import ua.kpi.tef.essd.controller.PartController;
 import ua.kpi.tef.essd.controller.UserController;
 import ua.kpi.tef.essd.entity.*;
 
+import java.util.stream.Collectors;
+
 @Log4j2
 @SpringBootApplication
 public class Executor {
@@ -29,7 +31,7 @@ public class Executor {
 
         userController.createUser(user);
 
-            log.info(userController.getUserInfo(user.getId()));
+        log.info(userController.getUserInfo(user.getId()));
 
         clothingController.createClothing(user.getId(), clothing);
         clothesSetController.createClothesSet(user.getId(), clothesSet);
@@ -44,6 +46,7 @@ public class Executor {
         partController.updatePartInClothingAmount(clothing.getId(), 4, 6);
 
         log.info(clothingController.getClothingInfo(clothing.getId()));
+        log.info(partController.getClothingParts(clothing.getId()).get(0).getPart().getName());
 
         context.close();
     }

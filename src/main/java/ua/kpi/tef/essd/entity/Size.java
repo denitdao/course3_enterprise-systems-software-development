@@ -1,8 +1,11 @@
 package ua.kpi.tef.essd.entity;
 
+import lombok.ToString;
+
 /**
  * <code>[XS, S, M, L, XL]</code>
  */
+@ToString
 public enum Size {
     XS("XS"), S("S"), M("M"), L("L"), XL("XL");
 
@@ -10,10 +13,5 @@ public enum Size {
 
     Size(String title) {
         this.title = title;
-    }
-
-    @Override
-    public String toString() {
-        return title;
     }
 }

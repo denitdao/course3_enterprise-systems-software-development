@@ -1,16 +1,23 @@
 package ua.kpi.tef.essd.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "parts")
+@NoArgsConstructor
+@Getter
 public class Part {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Setter
     private String name;
 
     // inserts properties itself
@@ -19,17 +26,17 @@ public class Part {
             name = "part_property",
             joinColumns = @JoinColumn(name = "part_id"),
             inverseJoinColumns = @JoinColumn(name = "property_id"))
+    @Setter
     private List<Property> properties = new LinkedList<>();
 
     // have to manually add clothes to the table
     @OneToMany(mappedBy = "part", cascade = CascadeType.MERGE)
+    @Setter
     private List<ClothingPart> clothes = new LinkedList<>();
-
-    public Part() { }
 
     public Part(String name, List<Property> properties) {
         this.name = name;
-        if(properties != null)
+        if (properties != null)
             properties.forEach(this::addProperty);
     }
 
@@ -60,34 +67,6 @@ public class Part {
                 clothingPart.setAmount(null);
             }
         }
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Property> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(List<Property> properties) {
-        this.properties = properties;
-    }
-
-    public List<ClothingPart> getClothes() {
-        return clothes;
-    }
-
-    public void setClothes(List<ClothingPart> clothes) {
-        this.clothes = clothes;
     }
 
     @Override

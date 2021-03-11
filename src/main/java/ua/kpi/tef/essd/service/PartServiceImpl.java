@@ -1,5 +1,6 @@
 package ua.kpi.tef.essd.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
+@Log4j2
 public class PartServiceImpl implements PartService {
 
     @Autowired
@@ -49,7 +51,9 @@ public class PartServiceImpl implements PartService {
 
     @Override
     public List<ClothingPart> getClothingParts(Integer clothingId) {
-        return clothingService.getClothing(clothingId).getParts();
+        List<ClothingPart> clothingParts = clothingService.getClothing(clothingId).getParts();
+        clothingParts.forEach(cp -> cp.getPart().getName()); // load the parts
+        return clothingParts;
     }
 
     @Override

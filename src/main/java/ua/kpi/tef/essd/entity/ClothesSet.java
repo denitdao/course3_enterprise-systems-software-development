@@ -1,18 +1,23 @@
 package ua.kpi.tef.essd.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "clothes_sets")
+@NoArgsConstructor
+@Getter
 public class ClothesSet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Setter
     private String name;
 
     @OneToMany(mappedBy = "clothesSet", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -20,10 +25,8 @@ public class ClothesSet {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @Setter
     private User user;
-
-    public ClothesSet() {
-    }
 
     public ClothesSet(String name, List<Clothing> setOfClothes) {
         this.name = name;
@@ -46,32 +49,8 @@ public class ClothesSet {
         clothing.setClothesSet(null);
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Clothing> getSetOfClothes() {
-        return setOfClothes;
-    }
-
     public void setSetOfClothes(List<Clothing> setOfClothes) {
-        if(setOfClothes != null)
+        if (setOfClothes != null)
             setOfClothes.forEach(this::addClothing);
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }
