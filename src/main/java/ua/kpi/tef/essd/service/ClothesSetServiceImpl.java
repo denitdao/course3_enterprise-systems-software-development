@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kpi.tef.essd.dao.ClothesSetDao;
 import ua.kpi.tef.essd.entity.ClothesSet;
-import ua.kpi.tef.essd.entity.Clothing;
-import ua.kpi.tef.essd.entity.User;
 
 import java.util.List;
 

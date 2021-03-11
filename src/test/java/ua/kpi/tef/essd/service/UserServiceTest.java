@@ -31,12 +31,6 @@ class UserServiceTest {
     @MockBean
     private UserDao userDao;
 
-    @MockBean
-    private ClothingDao clothingDao;
-
-    @MockBean
-    private ClothesSetDao clothesSetDao;
-
     @Autowired
     private UserService userService;
 

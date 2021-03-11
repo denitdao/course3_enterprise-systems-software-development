@@ -1,9 +1,7 @@
 package ua.kpi.tef.essd.entity;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -21,15 +19,15 @@ public class Part {
             name = "part_property",
             joinColumns = @JoinColumn(name = "part_id"),
             inverseJoinColumns = @JoinColumn(name = "property_id"))
-    private Set<Property> properties = new HashSet<>();
+    private List<Property> properties = new LinkedList<>();
 
     // have to manually add clothes to the table
     @OneToMany(mappedBy = "part", cascade = CascadeType.MERGE)
-    private Set<ClothingPart> clothes = new HashSet<>();
+    private List<ClothingPart> clothes = new LinkedList<>();
 
     public Part() { }
 
-    public Part(String name, Set<Property> properties) {
+    public Part(String name, List<Property> properties) {
         this.name = name;
         if(properties != null)
             properties.forEach(this::addProperty);
@@ -76,19 +74,19 @@ public class Part {
         this.name = name;
     }
 
-    public Set<Property> getProperties() {
+    public List<Property> getProperties() {
         return properties;
     }
 
-    public void setProperties(Set<Property> properties) {
+    public void setProperties(List<Property> properties) {
         this.properties = properties;
     }
 
-    public Set<ClothingPart> getClothes() {
+    public List<ClothingPart> getClothes() {
         return clothes;
     }
 
-    public void setClothes(Set<ClothingPart> clothes) {
+    public void setClothes(List<ClothingPart> clothes) {
         this.clothes = clothes;
     }
 

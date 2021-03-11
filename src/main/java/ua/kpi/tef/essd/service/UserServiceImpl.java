@@ -3,8 +3,6 @@ package ua.kpi.tef.essd.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.kpi.tef.essd.dao.ClothesSetDao;
-import ua.kpi.tef.essd.dao.ClothingDao;
 import ua.kpi.tef.essd.dao.UserDao;
 import ua.kpi.tef.essd.entity.User;
 

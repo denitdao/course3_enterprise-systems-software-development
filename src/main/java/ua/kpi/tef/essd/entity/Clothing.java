@@ -1,9 +1,7 @@
 package ua.kpi.tef.essd.entity;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -22,7 +20,7 @@ public class Clothing {
     private Size size;
 
     @OneToMany(mappedBy = "clothing", cascade = CascadeType.MERGE)
-    private Set<ClothingPart> parts = new HashSet<>();
+    private List<ClothingPart> parts = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -103,11 +101,11 @@ public class Clothing {
         this.size = size;
     }
 
-    public Set<ClothingPart> getParts() {
+    public List<ClothingPart> getParts() {
         return parts;
     }
 
-    public void setParts(Set<ClothingPart> parts) {
+    public void setParts(List<ClothingPart> parts) {
         this.parts = parts;
     }
 

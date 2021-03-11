@@ -2,6 +2,8 @@ package ua.kpi.tef.essd.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,11 +22,11 @@ public class Property {
     private String value;
 
     @ManyToMany(mappedBy = "properties", cascade = CascadeType.ALL)
-    private Set<Part> parts = new HashSet<>();
+    private final List<Part> parts = new LinkedList<>();
 
     public Property() { }
 
-    public Property(String name, String value, Set<Part> parts) {
+    public Property(String name, String value, List<Part> parts) {
         this.name = name;
         this.value = value;
         setParts(parts);
@@ -60,11 +62,11 @@ public class Property {
         this.value = value;
     }
 
-    public Set<Part> getParts() {
+    public List<Part> getParts() {
         return parts;
     }
 
-    public void setParts(Set<Part> parts) {
+    public void setParts(List<Part> parts) {
         if(parts != null)
             parts.forEach(this::addPart);
     }

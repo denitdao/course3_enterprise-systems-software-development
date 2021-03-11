@@ -20,24 +20,24 @@ public class ClothingController {
     @Autowired
     private Validator validator;
 
-    public void createClothing(Integer userId, Clothing clothing) throws RuntimeException {
-        if (validator.validateUser(userId)) {
+    public void createClothing(Integer userId, Clothing clothing) {
+        if (validator.validateUser(userId))
             clothingService.saveClothingOfUser(userId, clothing);
-        } else
+        else
             throw new NoSuchElementException("No user with specified id=" + userId + " found");
     }
 
-    public Clothing getClothingById(Integer clothingId) throws RuntimeException {
-        if (validator.validateClothing(clothingId)) {
+    public Clothing getClothingById(Integer clothingId) {
+        if (validator.validateClothing(clothingId))
             return clothingService.getClothing(clothingId);
-        } else
+        else
             throw new NoSuchElementException("No clothing with specified id=" + clothingId + " found");
     }
 
     public List<Clothing> getClothesOfUser(Integer userId) {
-        if (validator.validateUser(userId)) {
+        if (validator.validateUser(userId))
             return clothingService.getClothesOfUser(userId);
-        } else
+        else
             throw new NoSuchElementException("No user with specified id=" + userId + " found");
     }
 
@@ -58,9 +58,9 @@ public class ClothingController {
     }
 
     public void deleteClothing(Integer clothingId) {
-        if (validator.validateClothing(clothingId)) {
+        if (validator.validateClothing(clothingId))
             clothingService.deleteClothing(clothingId);
-        } else
+        else
             throw new NoSuchElementException("No user with specified id=" + clothingId + " found");
     }
 }

@@ -9,7 +9,7 @@ public class ClothingPart {
     @EmbeddedId
     private ClothingPartKey id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // todo to eager
     @MapsId("clothingId")
     @JoinColumn(name = "clothing_id")
     private Clothing clothing;
