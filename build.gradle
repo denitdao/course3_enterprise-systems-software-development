@@ -10,18 +10,27 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.clojure', name: 'java.jdbc', version: '0.7.12'
-    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.27.Final'
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.23'
+    compile 'org.clojure:java.jdbc:0.7.12'
+    compile 'org.hibernate:hibernate-core:5.4.28.Final'
+    compile 'mysql:mysql-connector-java:8.0.23'
+
+    compileOnly 'org.projectlombok:lombok:1.18.18'
+    annotationProcessor 'org.projectlombok:lombok:1.18.18'
+    testCompileOnly 'org.projectlombok:lombok:1.18.18'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.18'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.4.2'
-    //testImplementation group: 'org.springframework.boot', name: 'spring-boot-test', version: '2.4.1'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.4.3'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
-    implementation 'org.springframework:spring-core:5.3.3'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.4.2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.4.3'
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2:2.4.3'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.4.3'
+}
 
+configurations {
+    compile.exclude module: 'spring-boot-starter-logging'
 }
 
 test {

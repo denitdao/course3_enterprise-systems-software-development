@@ -2,32 +2,31 @@ package ua.kpi.tef.essd.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import ua.kpi.tef.essd.entity.User;
-import ua.kpi.tef.essd.service.ClothesSetService;
-import ua.kpi.tef.essd.service.ClothingService;
 import ua.kpi.tef.essd.service.UserService;
+import ua.kpi.tef.essd.service.Validator;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 public class UserController {
 
     @Autowired
-    private ClothesSetService clothesSetService;
-
-    @Autowired
-    private ClothingService clothingService;
-
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    private Validator validator;
 
     public void createUser(User user) {
         userService.saveUser(user);
     }
 
-    public User getUserById(Integer userId) {
-        return userService.getUser(userId);
+    public User getUserById(Integer userId) throws RuntimeException {
+        if (validator.validateUser(userId))
+            return userService.getUser(userId);
+        else
+            throw new NoSuchElementException("No user with specified id=" + userId + " found");
     }
 
     public List<User> getAllUsers() {

@@ -1,39 +1,46 @@
 package ua.kpi.tef.essd.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "clothes")
+@NoArgsConstructor
+@Getter
 public class Clothing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Setter
     private String name;
 
     @Enumerated(EnumType.ORDINAL)
+    @Setter
     private Type type;
 
     @Enumerated(EnumType.ORDINAL)
+    @Setter
     private Size size;
 
     @OneToMany(mappedBy = "clothing", cascade = CascadeType.MERGE)
-    private Set<ClothingPart> parts = new HashSet<>();
+    @Setter
+    private List<ClothingPart> parts = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @Setter
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clothes_set_id")
+    @Setter
     private ClothesSet clothesSet;
-
-    public Clothing() {
-    }
 
     public Clothing(String name, Type type, Size size) {
         this.name = name;
@@ -73,58 +80,6 @@ public class Clothing {
                 clothingPart.setAmount(null);
             }
         }
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public Size getSize() {
-        return size;
-    }
-
-    public void setSize(Size size) {
-        this.size = size;
-    }
-
-    public Set<ClothingPart> getParts() {
-        return parts;
-    }
-
-    public void setParts(Set<ClothingPart> parts) {
-        this.parts = parts;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public ClothesSet getClothesSet() {
-        return clothesSet;
-    }
-
-    public void setClothesSet(ClothesSet clothesSet) {
-        this.clothesSet = clothesSet;
     }
 
     @Override

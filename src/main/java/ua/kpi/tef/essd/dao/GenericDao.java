@@ -1,7 +1,5 @@
 package ua.kpi.tef.essd.dao;
 
-import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
@@ -43,6 +41,13 @@ public abstract class GenericDao<T> {
 
     public void deleteById(Integer id) {
         entityManager.remove(findById(id));
+    }
+
+    public boolean validate(Integer id) {
+        return !entityManager
+                .createQuery("select count(e) from " + clazz.getSimpleName() + " e where e.id = :id")
+                .setParameter("id", id)
+                .getSingleResult().equals(0L);
     }
 
 }

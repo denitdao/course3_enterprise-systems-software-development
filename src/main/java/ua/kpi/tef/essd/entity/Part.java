@@ -1,18 +1,23 @@
 package ua.kpi.tef.essd.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "parts")
+@NoArgsConstructor
+@Getter
 public class Part {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Setter
     private String name;
 
     // inserts properties itself
@@ -21,17 +26,17 @@ public class Part {
             name = "part_property",
             joinColumns = @JoinColumn(name = "part_id"),
             inverseJoinColumns = @JoinColumn(name = "property_id"))
-    private Set<Property> properties = new HashSet<>();
+    @Setter
+    private List<Property> properties = new LinkedList<>();
 
     // have to manually add clothes to the table
     @OneToMany(mappedBy = "part", cascade = CascadeType.MERGE)
-    private Set<ClothingPart> clothes = new HashSet<>();
+    @Setter
+    private List<ClothingPart> clothes = new LinkedList<>();
 
-    public Part() { }
-
-    public Part(String name, Set<Property> properties) {
+    public Part(String name, List<Property> properties) {
         this.name = name;
-        if(properties != null)
+        if (properties != null)
             properties.forEach(this::addProperty);
     }
 
@@ -62,34 +67,6 @@ public class Part {
                 clothingPart.setAmount(null);
             }
         }
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Property> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Set<Property> properties) {
-        this.properties = properties;
-    }
-
-    public Set<ClothingPart> getClothes() {
-        return clothes;
-    }
-
-    public void setClothes(Set<ClothingPart> clothes) {
-        this.clothes = clothes;
     }
 
     @Override

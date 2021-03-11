@@ -12,7 +12,7 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "ua.kpi.tef.essd.controller", "ua.kpi.tef.essd.service", "ua.kpi.tef.essd.dao"})
+@ComponentScan(basePackages = {"ua.kpi.tef.essd.controller", "ua.kpi.tef.essd.service", "ua.kpi.tef.essd.dao"})
 public class ApplicationConfiguration {
 
     @Bean

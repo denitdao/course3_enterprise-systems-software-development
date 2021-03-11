@@ -1,8 +1,11 @@
 package ua.kpi.tef.essd.entity;
 
+import lombok.ToString;
+
 /**
  * <code>[MAN, WOMAN, CHILDREN]</code>
  */
+@ToString
 public enum Type {
     MAN("Man"), WOMAN("Woman"), CHILDREN("Children");
 
@@ -10,10 +13,5 @@ public enum Type {
 
     Type(String title) {
         this.title = title;
-    }
-
-    @Override
-    public String toString() {
-        return title;
     }
 }

@@ -3,8 +3,6 @@ package ua.kpi.tef.essd.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.kpi.tef.essd.dao.ClothesSetDao;
-import ua.kpi.tef.essd.dao.ClothingDao;
 import ua.kpi.tef.essd.dao.UserDao;
 import ua.kpi.tef.essd.entity.User;
 
@@ -17,11 +15,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private ClothingDao clothingDao;
+    @Override
+    public List<User> getAllUsers() {
+        return userDao.findAll();
+    }
 
-    @Autowired
-    private ClothesSetDao clothesSetDao;
+    @Override
+    public String getUserInfo(Integer userId) {
+        return userDao.findById(userId).toString();
+    }
+
+//  ---- Simple CRUD methods ----
 
     @Override
     @Transactional(readOnly = false)
@@ -32,16 +36,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(Integer id) {
         return userDao.findById(id);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userDao.findAll();
-    }
-
-    @Override
-    public String getUserInfo(Integer userId) {
-        return userDao.findById(userId).toString();
     }
 
     @Override
