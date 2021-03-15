@@ -16,6 +16,8 @@
         <class>ua.kpi.tef.essd.entity.Property</class>
         <class>ua.kpi.tef.essd.entity.ClothingPart</class>
         <class>ua.kpi.tef.essd.entity.ClothingPartKey</class>
+        <class>ua.kpi.tef.essd.entity.Order</class>
+        <class>ua.kpi.tef.essd.entity.Role</class>
 
         <properties>
             <property name="hibernate.connection.driver" value="com.mysql.jdbc.Driver"/>

@@ -37,13 +37,11 @@ public class Property {
     }
 
     public void addPart(Part part) {
-        this.parts.add(part);
-        part.getProperties().add(this);
+        part.addProperty(this);
     }
 
     public void removePart(Part part) {
-        this.parts.remove(part);
-        part.getProperties().remove(this);
+        part.removeProperty(this);
     }
 
     public void setParts(List<Part> parts) {

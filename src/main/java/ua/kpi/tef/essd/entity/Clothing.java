@@ -32,6 +32,10 @@ public class Clothing {
     @Setter
     private List<ClothingPart> parts = new LinkedList<>();
 
+    @OneToMany(mappedBy = "clothing", cascade = CascadeType.MERGE)
+    @Setter
+    private List<Order> orders = new LinkedList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @Setter
@@ -82,6 +86,17 @@ public class Clothing {
         }
     }
 
+    public void addOrder(User user, Integer amount, OrderStatus status) {
+        Order order = new Order(user, this, amount, status);
+        this.orders.add(order);
+        user.getOrders().add(order);
+    }
+
+    public void removeOrder(Order order) {
+        order.getClothing().getOrders().remove(order);
+        order.getUser().getOrders().remove(order);
+    }
+
     @Override
     public String toString() {
         return "Clothing{" +
@@ -91,7 +106,8 @@ public class Clothing {
                 ", size=" + size +
                 ", parts={" + parts.stream().map(c -> c.getPart().getName() + " (" + c.getAmount() + ")").collect(Collectors.joining(" | ")) +
                 "}, user=" + user.getName() +
-                ", clothesSet=" + ((clothesSet != null) ? clothesSet.getName() : "none") +
+                ", orders={" + orders.stream().map(o -> o.getId().toString()).collect(Collectors.joining(" | ")) +
+                "}, clothesSet=" + ((clothesSet != null) ? clothesSet.getName() : "none") +
                 '}';
     }
 }
