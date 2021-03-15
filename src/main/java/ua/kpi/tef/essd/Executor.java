@@ -4,10 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ua.kpi.tef.essd.config.ApplicationConfiguration;
-import ua.kpi.tef.essd.controller.ClothesSetController;
-import ua.kpi.tef.essd.controller.ClothingController;
-import ua.kpi.tef.essd.controller.PartController;
-import ua.kpi.tef.essd.controller.UserController;
+import ua.kpi.tef.essd.controller.*;
 import ua.kpi.tef.essd.entity.*;
 
 import java.util.stream.Collectors;
@@ -24,6 +21,8 @@ public class Executor {
         UserController userController = context.getBean(UserController.class);
         ClothesSetController clothesSetController = context.getBean(ClothesSetController.class);
         PartController partController = context.getBean(PartController.class);
+        OrderController orderController = context.getBean(OrderController.class);
+        AdminController adminController = context.getBean(AdminController.class);
 
         User user = new User("Tester", 10, "nothing interesting");
         Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S);
@@ -45,8 +44,11 @@ public class Executor {
         partController.updatePartInClothingAmount(clothing.getId(), 2, 5);
         partController.updatePartInClothingAmount(clothing.getId(), 4, 6);
 
+        orderController.createOrder(user.getId(), clothing.getId(), 3);
+
+        adminController.changeOrderStatus(1, OrderStatus.Confirmed);
+
         log.info(clothingController.getClothingInfo(clothing.getId()));
-        log.info(partController.getClothingParts(clothing.getId()).get(0).getPart().getName());
 
         context.close();
     }
