@@ -33,8 +33,11 @@
                             /database_dump/parts.sql,
                             /database_dump/part_property.sql,
                             /database_dump/users.sql,
+                            /database_dump/roles.sql,
+                            /database_dump/user_role.sql,
                             /database_dump/clothes_sets.sql,
                             /database_dump/clothes.sql,
+                            /database_dump/orders.sql,
                             /database_dump/clothing_part.sql"/>
         </properties>
 

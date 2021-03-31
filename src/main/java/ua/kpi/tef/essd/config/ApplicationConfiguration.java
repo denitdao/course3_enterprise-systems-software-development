@@ -3,6 +3,7 @@ package ua.kpi.tef.essd.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -12,7 +13,8 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"ua.kpi.tef.essd.controller", "ua.kpi.tef.essd.service", "ua.kpi.tef.essd.dao"})
+@EnableJpaRepositories(basePackages = "ua.kpi.tef.essd.repository")
+@ComponentScan(basePackages = {"ua.kpi.tef.essd.controller", "ua.kpi.tef.essd.service"})
 public class ApplicationConfiguration {
 
     @Bean

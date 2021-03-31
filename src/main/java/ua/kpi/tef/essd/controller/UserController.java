@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ua.kpi.tef.essd.entity.User;
 import ua.kpi.tef.essd.service.UserService;
-import ua.kpi.tef.essd.service.Validator;
+import ua.kpi.tef.essd.service.implementation.Validator;
 
 import java.util.List;
 import java.util.NoSuchElementException;

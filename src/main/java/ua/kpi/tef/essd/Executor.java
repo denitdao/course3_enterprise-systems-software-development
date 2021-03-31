@@ -7,8 +7,6 @@ import ua.kpi.tef.essd.config.ApplicationConfiguration;
 import ua.kpi.tef.essd.controller.*;
 import ua.kpi.tef.essd.entity.*;
 
-import java.util.stream.Collectors;
-
 @Log4j2
 @SpringBootApplication
 public class Executor {

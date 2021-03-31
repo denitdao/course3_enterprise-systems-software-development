@@ -3,9 +3,8 @@ package ua.kpi.tef.essd.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ua.kpi.tef.essd.entity.ClothesSet;
-import ua.kpi.tef.essd.entity.Clothing;
-import ua.kpi.tef.essd.entity.User;
 import ua.kpi.tef.essd.service.*;
+import ua.kpi.tef.essd.service.implementation.Validator;
 
 import java.util.List;
 import java.util.NoSuchElementException;
