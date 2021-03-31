@@ -1,52 +1,54 @@
-package ua.kpi.tef.essd.service;
+package ua.kpi.tef.essd.service.implementation;
 
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.kpi.tef.essd.dao.PartDao;
 import ua.kpi.tef.essd.entity.Clothing;
 import ua.kpi.tef.essd.entity.ClothingPart;
 import ua.kpi.tef.essd.entity.Part;
+import ua.kpi.tef.essd.exception.ResourceNotFoundException;
+import ua.kpi.tef.essd.repository.PartRepository;
+import ua.kpi.tef.essd.service.ClothingService;
+import ua.kpi.tef.essd.service.PartService;
+import ua.kpi.tef.essd.util.EntityNames;
 
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
-@Log4j2
+@Transactional
 public class PartServiceImpl implements PartService {
 
     @Autowired
-    private PartDao partDao;
+    private PartRepository partRepository;
 
     @Autowired
     private ClothingService clothingService;
 
     @Override
-    @Transactional(readOnly = false)
     public void addPartToClothing(Integer clothingId, Integer partId, Integer amount) {
-        Part part = partDao.findById(partId);
+        Part part = partRepository.findById(partId)
+                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.PART, partId));
         clothingService.getClothing(clothingId).addPart(part, amount);
-        partDao.update(part);
+        partRepository.save(part);
     }
 
     /**
      * Change amount of parts in clothing to <code>newAmount</code>
      */
     @Override
-    @Transactional(readOnly = false)
     public void changePartInClothingAmount(Integer clothingId, Integer partId, Integer newAmount) {
-        Part part = partDao.findById(partId);
+        Part part = partRepository.findById(partId)
+                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.ORDER, partId));
         Clothing clothing = clothingService.getClothing(clothingId);
         clothing.removePart(part);
         if(newAmount > 0)
             clothing.addPart(part, newAmount);
-        partDao.update(part);
+        partRepository.save(part);
     }
 
     @Override
     public List<Part> getAllParts() {
-        return partDao.findAll();
+        return partRepository.findAll();
     }
 
     @Override
@@ -58,14 +60,16 @@ public class PartServiceImpl implements PartService {
 
     @Override
     public String getPartInfo(Integer partId) {
-        return partDao.findById(partId).toString();
+        return partRepository.findById(partId)
+                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.PART, partId))
+                .toString();
     }
 
     //  ---- Simple CRUD methods ----
 
     @Override
     public Part getPart(Integer id) {
-        return partDao.findById(id);
+        return partRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(EntityNames.PART, id));
     }
 
 }

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import ua.kpi.tef.essd.entity.ClothingPart;
 import ua.kpi.tef.essd.entity.Part;
 import ua.kpi.tef.essd.service.PartService;
-import ua.kpi.tef.essd.service.Validator;
+import ua.kpi.tef.essd.service.implementation.Validator;
 
 import java.util.List;
 import java.util.NoSuchElementException;

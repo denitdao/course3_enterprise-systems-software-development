@@ -1,19 +1,24 @@
-package ua.kpi.tef.essd.service;
+package ua.kpi.tef.essd.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.kpi.tef.essd.dao.ClothesSetDao;
 import ua.kpi.tef.essd.entity.ClothesSet;
+import ua.kpi.tef.essd.exception.ResourceNotFoundException;
+import ua.kpi.tef.essd.repository.ClothesSetRepository;
+import ua.kpi.tef.essd.service.ClothesSetService;
+import ua.kpi.tef.essd.service.ClothingService;
+import ua.kpi.tef.essd.service.UserService;
+import ua.kpi.tef.essd.util.EntityNames;
 
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class ClothesSetServiceImpl implements ClothesSetService {
 
     @Autowired
-    private ClothesSetDao clothesSetDao;
+    private ClothesSetRepository clothesSetRepository;
 
     @Autowired
     private UserService userService;
@@ -22,11 +27,10 @@ public class ClothesSetServiceImpl implements ClothesSetService {
     private ClothingService clothingService;
 
     @Override
-    @Transactional(readOnly = false)
     public void saveClothesSetOfUser(Integer userId, ClothesSet clothesSet) {
         userService.getUser(userId).addClothesSet(clothesSet);
 
-        clothesSetDao.save(clothesSet);
+        clothesSetRepository.save(clothesSet);
     }
 
     @Override
@@ -35,7 +39,6 @@ public class ClothesSetServiceImpl implements ClothesSetService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public ClothesSet getClothesSetOfClothing(Integer clothingId) {
         ClothesSet clothesSet = clothingService.getClothing(clothingId).getClothesSet();
         clothesSet.getName(); // lazy load all properties
@@ -44,31 +47,31 @@ public class ClothesSetServiceImpl implements ClothesSetService {
 
     @Override
     public String getClothesSetInfo(Integer clothesSetId) {
-        return clothesSetDao.findById(clothesSetId).toString();
+        return clothesSetRepository.findById(clothesSetId)
+                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.CLOTHES_SET, clothesSetId))
+                .toString();
     }
 
 //  ---- Simple CRUD methods ----
 
     @Override
-    @Transactional(readOnly = false)
     public void saveClothesSet(ClothesSet clothesSet) {
-        clothesSetDao.save(clothesSet);
+        clothesSetRepository.save(clothesSet);
     }
 
     @Override
     public ClothesSet getClothesSet(Integer id) {
-        return clothesSetDao.findById(id);
+        return clothesSetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.CLOTHES_SET, id));
     }
 
     @Override
-    @Transactional(readOnly = false)
     public ClothesSet updateClothesSet(ClothesSet clothesSet) {
-        return clothesSetDao.update(clothesSet);
+        return clothesSetRepository.save(clothesSet);
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void deleteClothesSet(Integer id) {
-        clothesSetDao.deleteById(id);
+        clothesSetRepository.deleteById(id);
     }
 }

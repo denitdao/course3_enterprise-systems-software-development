@@ -1,19 +1,24 @@
-package ua.kpi.tef.essd.service;
+package ua.kpi.tef.essd.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.kpi.tef.essd.dao.ClothingDao;
 import ua.kpi.tef.essd.entity.Clothing;
+import ua.kpi.tef.essd.exception.ResourceNotFoundException;
+import ua.kpi.tef.essd.repository.ClothingRepository;
+import ua.kpi.tef.essd.service.ClothesSetService;
+import ua.kpi.tef.essd.service.ClothingService;
+import ua.kpi.tef.essd.service.UserService;
+import ua.kpi.tef.essd.util.EntityNames;
 
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class ClothingServiceImpl implements ClothingService {
 
     @Autowired
-    private ClothingDao clothingDao;
+    private ClothingRepository clothingRepository;
 
     @Autowired
     private UserService userService;
@@ -22,10 +27,9 @@ public class ClothingServiceImpl implements ClothingService {
     private ClothesSetService clothesSetService;
 
     @Override
-    @Transactional(readOnly = false)
     public void saveClothingOfUser(Integer userId, Clothing clothing) {
         userService.getUser(userId).addClothing(clothing); // get connected to persistence user and link clothing
-        clothingDao.save(clothing); // insert clothing to the db
+        clothingRepository.save(clothing); // insert clothing to the db
     }
 
     @Override
@@ -35,39 +39,38 @@ public class ClothingServiceImpl implements ClothingService {
 
     @Override
     public String getClothingInfo(Integer clothingId) {
-        return clothingDao.findById(clothingId).toString();
+        return clothingRepository.findById(clothingId)
+                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.CLOTHING, clothingId)).toString();
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void addClothingToSet(Integer clothesSetId, Integer clothingId) {
-        Clothing clothing = clothingDao.findById(clothingId);
+        Clothing clothing = clothingRepository.findById(clothingId)
+                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.CLOTHING, clothingId));
         clothesSetService.getClothesSet(clothesSetId).addClothing(clothing);
     }
 
 //  ---- Simple CRUD methods ----
 
     @Override
-    @Transactional(readOnly = false)
     public void saveClothing(Clothing clothing) {
-        clothingDao.save(clothing);
+        clothingRepository.save(clothing);
     }
 
     @Override
     public Clothing getClothing(Integer id) {
-        return clothingDao.findById(id);
+        return clothingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.CLOTHING, id));
     }
 
     @Override
-    @Transactional(readOnly = false)
     public Clothing updateClothing(Clothing clothing) {
-        return clothingDao.update(clothing);
+        return clothingRepository.save(clothing);
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void deleteClothing(Integer clothingId) {
-        clothingDao.deleteById(clothingId);
+        clothingRepository.deleteById(clothingId);
     }
 
 }
