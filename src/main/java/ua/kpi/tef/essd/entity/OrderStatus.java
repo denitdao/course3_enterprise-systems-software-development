@@ -4,8 +4,8 @@ import lombok.ToString;
 
 @ToString
 public enum OrderStatus {
-    Pending("Pending"), Confirmed("Confirmed"), Shipped("Shipped"),
-    Delivered("Delivered"), Cancelled("Cancelled");
+    PENDING("Pending"), CONFIRMED("Confirmed"), SHIPPED("Shipped"),
+    DELIVERED("Delivered"), CANCELLED("Cancelled");
 
     private final String title;
 

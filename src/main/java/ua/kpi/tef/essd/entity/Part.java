@@ -1,5 +1,9 @@
 package ua.kpi.tef.essd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +16,7 @@ import java.util.stream.Collectors;
 @Table(name = "parts")
 @NoArgsConstructor
 @Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Part {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +25,7 @@ public class Part {
     @Setter
     private String name;
 
-    // inserts properties itself
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL}) // inserts properties itself
     @JoinTable(
             name = "part_property",
             joinColumns = @JoinColumn(name = "part_id"),
@@ -32,6 +36,7 @@ public class Part {
     // have to manually add clothes to the table
     @OneToMany(mappedBy = "part", cascade = CascadeType.MERGE)
     @Setter
+    @JsonIgnore
     private List<ClothingPart> clothes = new LinkedList<>();
 
     public Part(String name, List<Property> properties) {

@@ -1,5 +1,6 @@
 package ua.kpi.tef.essd.entity;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,11 +14,13 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cacheable
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @NoArgsConstructor
 @Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -32,19 +35,23 @@ public class User {
     private String description;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @JsonIgnoreProperties({"parts", "orders", "user", "clothesSet"})
     private final List<Clothing> clothes = new LinkedList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @JsonIgnoreProperties({"setOfClothes", "user"})
     private final List<ClothesSet> clothesSets = new LinkedList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
     @Setter
+    @JsonIgnoreProperties({"user", "clothing"})
     private List<Order> orders = new LinkedList<>();
 
     @ManyToMany
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonIgnoreProperties({"users"})
     private final List<Role> roles = new LinkedList<>();
 
     public User(String name, Integer age, String description) {

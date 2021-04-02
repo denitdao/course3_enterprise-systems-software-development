@@ -20,7 +20,7 @@
         <class>ua.kpi.tef.essd.entity.Role</class>
 
         <properties>
-            <property name="hibernate.connection.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/clothes_designer"/>
             <property name="hibernate.connection.user" value="clothes_designer_app"/>
             <property name="hibernate.connection.password" value="CDUa*D?aGpHs87/"/>

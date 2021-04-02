@@ -1,5 +1,8 @@
 package ua.kpi.tef.essd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +19,7 @@ import java.util.List;
 @Table(name = "properties")
 @NoArgsConstructor
 @Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +32,7 @@ public class Property {
     private String value;
 
     @ManyToMany(mappedBy = "properties", cascade = CascadeType.ALL)
+    @JsonIgnore
     private final List<Part> parts = new LinkedList<>();
 
     public Property(String name, String value, List<Part> parts) {

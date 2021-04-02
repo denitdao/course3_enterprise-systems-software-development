@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     public void saveOrder(Integer userId, Integer clothingId, Integer amount) {
         Clothing clothing = clothingService.getClothing(clothingId);
         User user = userService.getUser(userId);
-        Order order = new Order(user, clothing, amount, OrderStatus.Pending);
+        Order order = new Order(user, clothing, amount, OrderStatus.PENDING);
         orderRepository.save(order);
     }
 

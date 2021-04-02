@@ -1,7 +1,7 @@
 package ua.kpi.tef.essd.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import ua.kpi.tef.essd.entity.ClothesSet;
 import ua.kpi.tef.essd.service.*;
 import ua.kpi.tef.essd.service.implementation.Validator;
@@ -12,7 +12,8 @@ import java.util.NoSuchElementException;
 /**
  * Use this controller to get or update ClothingSets.
  */
-@Controller
+@RestController
+@RequestMapping(value = "/clothes_set")
 public class ClothesSetController {
 
     @Autowired
@@ -21,40 +22,47 @@ public class ClothesSetController {
     @Autowired
     private Validator validator;
 
-    public void createClothesSet(Integer userId, ClothesSet clothesSet) {
+    @PostMapping
+    public void createClothesSet(@RequestBody Integer userId, @RequestBody ClothesSet clothesSet) {
         if (validator.validateUser(userId))
             clothesSetService.saveClothesSetOfUser(userId, clothesSet);
         else
             throw new NoSuchElementException("No user with specified id=" + userId + " found");
     }
 
-    public ClothesSet getClothesSetById(Integer clothesSetId) {
+    @GetMapping("/{clothesSetId}")
+    public ClothesSet getClothesSetById(@PathVariable Integer clothesSetId) {
         return clothesSetService.getClothesSet(clothesSetId);
     }
 
-    public List<ClothesSet> getClothesSetsOfUser(Integer userId) {
+    @GetMapping("/user/{userId}")
+    public List<ClothesSet> getClothesSetsOfUser(@PathVariable Integer userId) {
         if (validator.validateUser(userId))
             return clothesSetService.getClothesSetsOfUser(userId);
         else
             throw new NoSuchElementException("No user with specified id=" + userId + " found");
     }
 
-    public ClothesSet getClothesSetWithClothing(Integer clothingId) {
+    @GetMapping("/clothing/{clothingId}")
+    public ClothesSet getClothesSetWithClothing(@PathVariable Integer clothingId) {
         if (validator.validateClothing(clothingId))
             return clothesSetService.getClothesSetOfClothing(clothingId);
         else
             throw new NoSuchElementException("No clothing with specified id=" + clothingId + " found");
     }
 
-    public String getClothesSetInfo(Integer clothesSetId) {
+    @GetMapping("/info/{clothesSetId}")
+    public String getClothesSetInfo(@PathVariable Integer clothesSetId) {
         return clothesSetService.getClothesSetInfo(clothesSetId);
     }
 
-    public void updateClothesSet(ClothesSet clothesSet) {
+    @PutMapping
+    public void updateClothesSet(@RequestBody ClothesSet clothesSet) {
         clothesSetService.updateClothesSet(clothesSet);
     }
 
-    public void deleteClothesSet(Integer clothesSetId) {
+    @DeleteMapping("/{clothesSetId}")
+    public void deleteClothesSet(@PathVariable Integer clothesSetId) {
         if (validator.validateClothesSet(clothesSetId))
             clothesSetService.deleteClothesSet(clothesSetId);
         else

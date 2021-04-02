@@ -9,8 +9,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kpi.tef.essd.config.ApplicationConfiguration;
-import ua.kpi.tef.essd.dao.PartDao;
 import ua.kpi.tef.essd.entity.*;
+import ua.kpi.tef.essd.repository.PartRepository;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
@@ -25,7 +27,7 @@ class PartServiceTest {
     private PartService partService;
 
     @Autowired
-    private PartDao partDao;
+    private PartRepository partRepository;
 
     @Test
     void When_getPart_Expect_Returned() {
@@ -33,7 +35,9 @@ class PartServiceTest {
         //User user = new User("Tester", 10, "nothing interesting");
 
         // Execute the service call
-        assertEquals("", partService.getPartInfo(1));
+        assertEquals("Part{id=1, name='Sleeve', properties=[Property{id=1, name='Color', value='Red'}, " +
+                        "Property{id=6, name='Material', value='Cotton'}, Property{id=11, name='Fit', value='Regular'}], " +
+                        "clothes={Basic Trousers}}", partService.getPartInfo(1));
 
         // verify that mock called
         //verify(userDao).save(user);
@@ -54,11 +58,15 @@ class PartServiceTest {
         Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S);
         entityManager.persist(clothing);
 
-        Part part = partDao.findById(1);
+
+        Optional<Part> partOptional = partRepository.findById(1);
+        assertTrue(partOptional.isPresent());
+        Part part = partOptional.get();
 
         partService.addPartToClothing(clothing.getId(), part.getId(), 4);
 
-        assertEquals("", partService.getClothingParts(clothing.getId()));
+        assertEquals("[ClothingPart{id=ClothingPartKey(clothingId=6, partId=1), " +
+                "clothing=Tester Shirt, part=Sleeve, amount=4}]", partService.getClothingParts(clothing.getId()).toString());
     }
 
 }

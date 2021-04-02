@@ -1,8 +1,5 @@
 package ua.kpi.tef.essd.util;
 
-import lombok.ToString;
-
-@ToString
 public enum EntityNames {
 
     USER("User"), CLOTHING("Clothing"), CLOTHES_SET("Clothes set"),
@@ -14,4 +11,8 @@ public enum EntityNames {
         this.title = title;
     }
 
+    @Override
+    public String toString() {
+        return title;
+    }
 }

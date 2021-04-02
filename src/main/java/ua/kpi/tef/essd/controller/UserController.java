@@ -1,7 +1,7 @@
 package ua.kpi.tef.essd.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import ua.kpi.tef.essd.entity.User;
 import ua.kpi.tef.essd.service.UserService;
 import ua.kpi.tef.essd.service.implementation.Validator;
@@ -9,7 +9,8 @@ import ua.kpi.tef.essd.service.implementation.Validator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@Controller
+@RestController
+@RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired
@@ -18,26 +19,31 @@ public class UserController {
     @Autowired
     private Validator validator;
 
-    public void createUser(User user) {
+    @PostMapping
+    public void createUser(@RequestBody User user) {
         userService.saveUser(user);
     }
 
-    public User getUserById(Integer userId) throws RuntimeException {
+    @GetMapping(value = "/{userId}")
+    public User getUserById(@PathVariable Integer userId) throws NoSuchElementException {
         if (validator.validateUser(userId))
             return userService.getUser(userId);
         else
             throw new NoSuchElementException("No user with specified id=" + userId + " found");
     }
 
+    @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    public String getUserInfo(Integer userId) {
+    @GetMapping(value = "/info/{userId}")
+    public String getUserInfo(@PathVariable Integer userId) {
         return userService.getUserInfo(userId);
     }
 
-    public void updateUser(User user) {
+    @PutMapping
+    public void updateUser(@RequestBody User user) {
         userService.updateUser(user);
     }
 

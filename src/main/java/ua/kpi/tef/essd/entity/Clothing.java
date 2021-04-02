@@ -1,5 +1,6 @@
 package ua.kpi.tef.essd.entity;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,9 @@ import java.util.stream.Collectors;
 @Table(name = "clothes")
 @NoArgsConstructor
 @Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Clothing {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -30,20 +33,24 @@ public class Clothing {
 
     @OneToMany(mappedBy = "clothing", cascade = CascadeType.MERGE)
     @Setter
+    @JsonIgnoreProperties({"id", "clothing"})
     private List<ClothingPart> parts = new LinkedList<>();
 
     @OneToMany(mappedBy = "clothing", cascade = CascadeType.MERGE)
     @Setter
+    @JsonIdentityReference(alwaysAsId=true)
     private List<Order> orders = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @Setter
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "clothes", "clothesSets", "orders", "roles"})
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clothes_set_id")
     @Setter
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "setOfClothes", "user"})
     private ClothesSet clothesSet;
 
     public Clothing(String name, Type type, Size size) {

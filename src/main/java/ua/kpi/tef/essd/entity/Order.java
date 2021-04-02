@@ -1,5 +1,8 @@
 package ua.kpi.tef.essd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +13,7 @@ import javax.persistence.*;
 @Table(name = "orders")
 @NoArgsConstructor
 @Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Order {
 
     @Id
@@ -19,11 +23,13 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @Setter
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "clothes", "clothesSets", "orders", "roles"})
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clothing_id")
     @Setter
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "parts", "orders", "clothesSet", "user"})
     private Clothing clothing;
 
     @Setter

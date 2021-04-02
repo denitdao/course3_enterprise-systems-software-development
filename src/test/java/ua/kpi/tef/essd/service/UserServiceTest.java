@@ -5,19 +5,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kpi.tef.essd.config.ApplicationConfiguration;
-import ua.kpi.tef.essd.dao.ClothesSetDao;
-import ua.kpi.tef.essd.dao.ClothingDao;
-import ua.kpi.tef.essd.dao.UserDao;
 import ua.kpi.tef.essd.entity.User;
+import ua.kpi.tef.essd.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
@@ -29,7 +26,7 @@ import static org.mockito.Mockito.verify;
 class UserServiceTest {
 
     @MockBean
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -43,13 +40,13 @@ class UserServiceTest {
         userService.saveUser(user);
 
         // verify that mock called
-        verify(userDao).save(user);
+        verify(userRepository).save(user);
     }
 
     @Test
     void When_getUserById_Expect_Entity() {
         User user = new User("Tester", 10, "nothing interesting");
-        doReturn(user).when(userDao).findById(1);
+        doReturn(Optional.of(user)).when(userRepository).findById(1);
 
         User returnedUser = userService.getUser(1);
 
@@ -62,7 +59,7 @@ class UserServiceTest {
         User user1 = new User("Tester 1", 10, "nothing interesting");
         User user2 = new User("Tester 2", 20, "nothing interesting too");
         List<User> expected = List.of(user1, user2);
-        doReturn(expected).when(userDao).findAll();
+        doReturn(expected).when(userRepository).findAll();
 
         List<User> returned = userService.getAllUsers();
 
@@ -76,11 +73,11 @@ class UserServiceTest {
     @Transactional
     void When_getUserInfo_Expect_String() {
         User user = entityManager.find(User.class, 1);
-        doReturn(user).when(userDao).findById(user.getId());
+        doReturn(Optional.of(user)).when(userRepository).findById(user.getId());
 
         String returned = userService.getUserInfo(user.getId());
 
-        verify(userDao).findById(user.getId());
+        verify(userRepository).findById(user.getId());
         assertEquals(user.toString(), returned, "The service returned was not the same as the mock");
     }
 
@@ -90,7 +87,7 @@ class UserServiceTest {
 
         userService.updateUser(user);
 
-        verify(userDao).update(user);
+        verify(userRepository).save(user);
     }
 
     @Test
@@ -99,7 +96,7 @@ class UserServiceTest {
 
         userService.deleteUser(user);
 
-        verify(userDao).delete(user);
+        verify(userRepository).delete(user);
     }
 
 }
