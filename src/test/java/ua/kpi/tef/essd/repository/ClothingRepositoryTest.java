@@ -37,7 +37,7 @@ class ClothingRepositoryTest {
 
     @Test
     void When_save_Expect_PersistedToDB() {
-        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S);
+        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S, null, null);
 
         clothingRepository.save(clothing);
         Clothing found = entityManager.find(Clothing.class, clothing.getId());
@@ -52,8 +52,8 @@ class ClothingRepositoryTest {
 
     @Test
     void When_findAll_Expect_ContainsAll() {
-        Clothing clothing1 = new Clothing("Tester Shirt 1", Type.CHILDREN, Size.S);
-        Clothing clothing2 = new Clothing("Tester Shirt 2", Type.CHILDREN, Size.S);
+        Clothing clothing1 = new Clothing("Tester Shirt 1", Type.CHILDREN, Size.S, null, null);
+        Clothing clothing2 = new Clothing("Tester Shirt 2", Type.CHILDREN, Size.S, null, null);
 
         entityManager.persist(clothing1);
         entityManager.persist(clothing2);
@@ -66,7 +66,7 @@ class ClothingRepositoryTest {
 
     @Test
     void When_update_Expect_PersistedChanges() {
-        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S);
+        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S, null, null);
         entityManager.persist(clothing);
         clothing.setName("Tester Shirt Altered");
         clothing.setType(Type.MAN);
@@ -78,7 +78,7 @@ class ClothingRepositoryTest {
 
     @Test
     void When_delete_Expect_RemovedFromDB() {
-        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S);
+        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S, null, null);
         entityManager.persist(clothing);
 
         clothingRepository.deleteById(clothing.getId());

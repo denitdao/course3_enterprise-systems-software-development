@@ -34,7 +34,7 @@ class UserServiceTest {
     @Test
     void When_saveUser_Expect_Persisted() {
         // Setup our mock dao
-        User user = new User("Tester", 10, "nothing interesting");
+        User user = new User("Tester", 10, "nothing interesting", null, null, null);
 
         // Execute the service call
         userService.saveUser(user);
@@ -45,7 +45,7 @@ class UserServiceTest {
 
     @Test
     void When_getUserById_Expect_Entity() {
-        User user = new User("Tester", 10, "nothing interesting");
+        User user = new User("Tester", 10, "nothing interesting", null, null, null);
         doReturn(Optional.of(user)).when(userRepository).findById(1);
 
         User returnedUser = userService.getUser(1);
@@ -56,8 +56,8 @@ class UserServiceTest {
 
     @Test
     void When_getAllUsers_Expect_ListOfEntities() {
-        User user1 = new User("Tester 1", 10, "nothing interesting");
-        User user2 = new User("Tester 2", 20, "nothing interesting too");
+        User user1 = new User("Tester 1", 10, "nothing interesting", null, null, null);
+        User user2 = new User("Tester 2", 20, "nothing interesting too", null, null, null);
         List<User> expected = List.of(user1, user2);
         doReturn(expected).when(userRepository).findAll();
 
@@ -83,7 +83,7 @@ class UserServiceTest {
 
     @Test
     void When_updateUser_Expect_Updated() {
-        User user = new User("Tester", 10, "nothing interesting");
+        User user = new User("Tester", 10, "nothing interesting", null, null, null);
 
         userService.updateUser(user);
 
@@ -92,9 +92,9 @@ class UserServiceTest {
 
     @Test
     void When_deleteUser_Expect_Removed() {
-        User user = new User("Tester", 10, "nothing interesting");
+        User user = new User("Tester", 10, "nothing interesting", null, null, null);
 
-        userService.deleteUser(user);
+        userService.deleteUser(user.getId());
 
         verify(userRepository).delete(user);
     }

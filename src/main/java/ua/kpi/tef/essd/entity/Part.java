@@ -25,7 +25,7 @@ public class Part {
     @Setter
     private String name;
 
-    @ManyToMany(cascade = {CascadeType.ALL}) // inserts properties itself
+    @ManyToMany(cascade = CascadeType.ALL) // inserts properties itself
     @JoinTable(
             name = "part_property",
             joinColumns = @JoinColumn(name = "part_id"),
@@ -33,7 +33,6 @@ public class Part {
     @Setter
     private List<Property> properties = new LinkedList<>();
 
-    // have to manually add clothes to the table
     @OneToMany(mappedBy = "part", cascade = CascadeType.MERGE)
     @Setter
     @JsonIgnore

@@ -47,4 +47,12 @@ public class UserController {
         userService.updateUser(user);
     }
 
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable Integer userId) {
+        if (validator.validateUser(userId))
+            userService.deleteUser(userId);
+        else
+            throw new NoSuchElementException("No user with specified id=" + userId + " found");
+    }
+
 }

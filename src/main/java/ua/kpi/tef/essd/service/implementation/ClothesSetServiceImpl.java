@@ -72,6 +72,9 @@ public class ClothesSetServiceImpl implements ClothesSetService {
 
     @Override
     public void deleteClothesSet(Integer id) {
+        clothesSetRepository.getOne(id)
+                .getSetOfClothes()
+                .forEach(clothing -> clothing.setClothesSet(null));
         clothesSetRepository.deleteById(id);
     }
 }

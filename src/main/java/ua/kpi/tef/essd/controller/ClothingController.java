@@ -70,6 +70,6 @@ public class ClothingController {
         if (validator.validateClothing(clothingId))
             clothingService.deleteClothing(clothingId);
         else
-            throw new NoSuchElementException("No user with specified id=" + clothingId + " found");
+            throw new NoSuchElementException("No clothing with specified id=" + clothingId + " found");
     }
 }

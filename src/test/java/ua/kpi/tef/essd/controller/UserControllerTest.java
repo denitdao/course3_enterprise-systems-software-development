@@ -28,8 +28,8 @@ class UserControllerTest {
     UserController userController;
 
     @Test
-    public void When_createUser_Expect_UserPersisted() {
-        User user = new User("Tester", 10, "nothing interesting");
+    void When_createUser_Expect_UserPersisted() {
+        User user = new User("Tester", 10, "nothing interesting", null, null, null);
 
         userController.createUser(user);
         User found = entityManager.find(User.class, user.getId());
@@ -38,8 +38,8 @@ class UserControllerTest {
     }
 
     @Test
-    public void When_updateUser_Expect_UserUpdated() {
-        User user = new User("Tester", 10, "nothing interesting");
+    void When_updateUser_Expect_UserUpdated() {
+        User user = new User("Tester", 10, "nothing interesting", null, null, null);
         entityManager.persist(user);
 
         user.setName("Changed");

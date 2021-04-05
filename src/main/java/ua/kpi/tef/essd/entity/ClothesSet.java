@@ -25,7 +25,7 @@ public class ClothesSet {
     @Setter
     private String name;
 
-    @OneToMany(mappedBy = "clothesSet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "clothesSet", cascade = {CascadeType.MERGE, CascadeType.DETACH})
     @JsonIgnoreProperties({"parts", "orders", "clothesSet", "user"})
     private final List<Clothing> setOfClothes = new LinkedList<>();
 
@@ -34,11 +34,6 @@ public class ClothesSet {
     @Setter
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "clothes", "clothesSets", "orders", "roles"})
     private User user;
-
-    public ClothesSet(String name, List<Clothing> setOfClothes) {
-        this.name = name;
-        setSetOfClothes(setOfClothes);
-    }
 
     public ClothesSet(String name, List<Clothing> setOfClothes, User user) {
         this.name = name;

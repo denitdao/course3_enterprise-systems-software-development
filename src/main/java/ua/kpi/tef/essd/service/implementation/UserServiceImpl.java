@@ -49,7 +49,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(User user) {
-        userRepository.delete(user);
+    public void deleteUser(Integer id) {
+        User user = userRepository.getOne(id);
+        user.getClothes()
+                .forEach(clothing -> clothing.setUser(null));
+        user.getClothesSets()
+                .forEach(clothesSet -> clothesSet.setUser(null));
+        userRepository.deleteById(id);
     }
 }

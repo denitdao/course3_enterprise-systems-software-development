@@ -55,7 +55,7 @@ class PartServiceTest {
 
         verify(userDao).findById(user.getId());
         assertEquals(user.toString(), returned, "The service returned was not the same as the mock");*/
-        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S);
+        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S, null, null);
         entityManager.persist(clothing);
 
 

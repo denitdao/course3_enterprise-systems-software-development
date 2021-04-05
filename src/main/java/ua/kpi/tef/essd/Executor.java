@@ -23,9 +23,9 @@ public class Executor {
         OrderController orderController = context.getBean(OrderController.class);
         AdminController adminController = context.getBean(AdminController.class);
 
-        User user = new User("Tester", 10, "nothing interesting");
-        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S);
-        ClothesSet clothesSet = new ClothesSet("Tester's set", null);
+        User user = new User("Tester", 10, "nothing interesting", null, null, null);
+        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S, null, null);
+        ClothesSet clothesSet = new ClothesSet("Tester's set", null, null);
 
         userController.createUser(user);
 
