@@ -29,7 +29,7 @@ public class Executor {
 
         userController.createUser(user);
 
-        log.info(userController.getUserInfo(user.getId()));
+//        log.info(userController.getUserInfo(user.getId()));
 
         clothingController.createClothing(user.getId(), clothing);
         clothesSetController.createClothesSet(user.getId(), clothesSet);

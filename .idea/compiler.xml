@@ -12,6 +12,6 @@
         <module name="enterprise_systems_software_development.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.10" />
+    <bytecodeTargetLevel target="11" />
   </component>
 </project>
