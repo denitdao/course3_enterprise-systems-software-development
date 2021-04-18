@@ -7,6 +7,7 @@ import ua.kpi.tef.essd.entity.Clothing;
 import ua.kpi.tef.essd.entity.ClothingPart;
 import ua.kpi.tef.essd.entity.Part;
 import ua.kpi.tef.essd.exception.ResourceNotFoundException;
+import ua.kpi.tef.essd.exception.WrongValueException;
 import ua.kpi.tef.essd.repository.PartRepository;
 import ua.kpi.tef.essd.service.ClothingService;
 import ua.kpi.tef.essd.service.PartService;
@@ -26,6 +27,8 @@ public class PartServiceImpl implements PartService {
 
     @Override
     public void addPartToClothing(Integer clothingId, Integer partId, Integer amount) {
+        if (amount <= 0)
+            throw new WrongValueException("Amount", amount);
         Part part = partRepository.findById(partId)
                 .orElseThrow(() -> new ResourceNotFoundException(EntityNames.PART, partId));
         clothingService.getClothing(clothingId).addPart(part, amount);
@@ -41,7 +44,7 @@ public class PartServiceImpl implements PartService {
                 .orElseThrow(() -> new ResourceNotFoundException(EntityNames.ORDER, partId));
         Clothing clothing = clothingService.getClothing(clothingId);
         clothing.removePart(part);
-        if(newAmount > 0)
+        if (newAmount > 0)
             clothing.addPart(part, newAmount);
         partRepository.save(part);
     }
@@ -53,16 +56,7 @@ public class PartServiceImpl implements PartService {
 
     @Override
     public List<ClothingPart> getClothingParts(Integer clothingId) {
-        List<ClothingPart> clothingParts = clothingService.getClothing(clothingId).getParts();
-        clothingParts.forEach(cp -> cp.getPart().getName()); // load the parts
-        return clothingParts;
-    }
-
-    @Override
-    public String getPartInfo(Integer partId) {
-        return partRepository.findById(partId)
-                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.PART, partId))
-                .toString();
+        return clothingService.getClothing(clothingId).getParts(); // clothingParts.forEach(cp -> cp.getPart().getName()); load the parts
     }
 
     //  ---- Simple CRUD methods ----

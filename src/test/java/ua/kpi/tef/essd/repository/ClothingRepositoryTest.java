@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -14,7 +13,6 @@ import ua.kpi.tef.essd.config.ApplicationConfiguration;
 import ua.kpi.tef.essd.entity.Clothing;
 import ua.kpi.tef.essd.entity.Size;
 import ua.kpi.tef.essd.entity.Type;
-import ua.kpi.tef.essd.entity.User;
 
 import java.util.List;
 
@@ -23,12 +21,16 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test example.
+ * Repository may not be tested if it doesn't contain logic.
+ */
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = ApplicationConfiguration.class)
 @AutoConfigureTestEntityManager
 @Transactional
 class ClothingRepositoryTest {
-
+// todo update configuration and db
     @Autowired
     private TestEntityManager entityManager;
 

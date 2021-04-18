@@ -14,12 +14,13 @@ import ua.kpi.tef.essd.entity.User;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// UserControllerIntegrationTest (integration test) - where we use controller to insert and check using Service
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ContextConfiguration(classes = ApplicationConfiguration.class)
 @Transactional
 @AutoConfigureTestEntityManager
-class UserControllerTest {
+class UserControllerIntegrationTest {
 
     @Autowired
     private TestEntityManager entityManager;

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.kpi.tef.essd.entity.User;
 import ua.kpi.tef.essd.exception.ResourceNotFoundException;
 import ua.kpi.tef.essd.repository.UserRepository;
+import ua.kpi.tef.essd.service.RoleService;
 import ua.kpi.tef.essd.service.UserService;
 import ua.kpi.tef.essd.util.EntityNames;
 
@@ -18,23 +19,20 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RoleService roleService;
+
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
-    }
-
-    @Override
-    public String getUserInfo(Integer userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.USER, userId))
-                .toString();
     }
 
 //  ---- Simple CRUD methods ----
 
     @Override
     public void saveUser(User user) {
-        userRepository.save(user);
+        user = userRepository.save(user);
+        roleService.addRoleToUser(user.getId(), 2);
     }
 
     @Override
@@ -50,11 +48,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Integer id) {
-        User user = userRepository.getOne(id);
+        User user = this.getUser(id);
         user.getClothes()
                 .forEach(clothing -> clothing.setUser(null));
         user.getClothesSets()
                 .forEach(clothesSet -> clothesSet.setUser(null));
-        userRepository.deleteById(id);
+        userRepository.delete(user);
     }
 }

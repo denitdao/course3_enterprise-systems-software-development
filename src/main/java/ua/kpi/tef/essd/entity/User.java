@@ -106,17 +106,6 @@ public class User {
         role.getUsers().remove(this);
     }
 
-    public void addOrder(Clothing clothing, Integer amount, OrderStatus status) {
-        Order order = new Order(this, clothing, amount, status);
-        this.orders.add(order);
-        clothing.getOrders().add(order);
-    }
-
-    public void removeOrder(Order order) {
-        order.getClothing().getOrders().remove(order);
-        order.getUser().getOrders().remove(order);
-    }
-
     public void setClothes(List<Clothing> clothes) {
         if (clothes != null)
             clothes.forEach(this::addClothing);

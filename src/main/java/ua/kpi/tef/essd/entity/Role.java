@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -24,7 +25,7 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     @JsonIgnoreProperties({"clothes", "clothesSets", "orders", "roles"})
-    private List<User> users;
+    private final List<User> users = new LinkedList<>();
 
     /**
      * Link both User and Role to each-other

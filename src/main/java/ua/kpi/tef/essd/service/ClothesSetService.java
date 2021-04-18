@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface ClothesSetService {
 
-    void saveClothesSet(ClothesSet clothesSet);
-
     void saveClothesSetOfUser(Integer userId, ClothesSet clothesSet);
 
     ClothesSet getClothesSet(Integer id);
@@ -15,8 +13,6 @@ public interface ClothesSetService {
     List<ClothesSet> getClothesSetsOfUser(Integer userId);
 
     ClothesSet getClothesSetOfClothing(Integer clothingId);
-
-    String getClothesSetInfo(Integer id);
 
     ClothesSet updateClothesSet(ClothesSet clothesSet);
 

@@ -17,5 +17,4 @@ public interface PartService {
 
     List<ClothingPart> getClothingParts(Integer clothingId);
 
-    String getPartInfo(Integer partId);
 }
