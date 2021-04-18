@@ -1,10 +1,9 @@
 package ua.kpi.tef.essd.entity;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -13,11 +12,11 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @NoArgsConstructor
 @Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -31,27 +30,24 @@ public class User {
     @Setter
     private String description;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH})
+    @JsonIgnoreProperties({"parts", "orders", "user", "clothesSet"})
     private final List<Clothing> clothes = new LinkedList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "setOfClothes", "user"})
     private final List<ClothesSet> clothesSets = new LinkedList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
-    @Setter
-    private List<Order> orders = new LinkedList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"user", "clothing"})
+    private final List<Order> orders = new LinkedList<>();
 
     @ManyToMany
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonIgnoreProperties({"users"})
     private final List<Role> roles = new LinkedList<>();
-
-    public User(String name, Integer age, String description) {
-        this.name = name;
-        this.age = age;
-        this.description = description;
-    }
 
     public User(String name, Integer age, String description, List<Clothing> clothes, List<ClothesSet> clothesSets, List<Role> roles) {
         this.name = name;
@@ -108,17 +104,6 @@ public class User {
     public void removeRole(Role role) {
         roles.remove(role);
         role.getUsers().remove(this);
-    }
-
-    public void addOrder(Clothing clothing, Integer amount, OrderStatus status) {
-        Order order = new Order(this, clothing, amount, status);
-        this.orders.add(order);
-        clothing.getOrders().add(order);
-    }
-
-    public void removeOrder(Order order) {
-        order.getClothing().getOrders().remove(order);
-        order.getUser().getOrders().remove(order);
     }
 
     public void setClothes(List<Clothing> clothes) {

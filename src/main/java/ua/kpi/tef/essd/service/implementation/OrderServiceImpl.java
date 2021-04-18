@@ -1,10 +1,12 @@
 package ua.kpi.tef.essd.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kpi.tef.essd.entity.*;
 import ua.kpi.tef.essd.exception.ResourceNotFoundException;
+import ua.kpi.tef.essd.exception.WrongValueException;
 import ua.kpi.tef.essd.repository.OrderRepository;
 import ua.kpi.tef.essd.service.ClothingService;
 import ua.kpi.tef.essd.service.OrderService;
@@ -48,9 +50,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void saveOrder(Integer userId, Integer clothingId, Integer amount) {
+        if (amount <= 0)
+            throw new WrongValueException("Amount", amount);
         Clothing clothing = clothingService.getClothing(clothingId);
         User user = userService.getUser(userId);
-        Order order = new Order(user, clothing, amount, OrderStatus.Pending);
+        Order order = new Order(user, clothing, amount, OrderStatus.PENDING);
         orderRepository.save(order);
     }
 
@@ -62,7 +66,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Integer orderId) {
-        orderRepository.deleteById(orderId);
+        try {
+            orderRepository.deleteById(orderId);
+        } catch (DataAccessException ex) {
+            throw new ResourceNotFoundException(EntityNames.ORDER, orderId);
+        }
     }
 
 }

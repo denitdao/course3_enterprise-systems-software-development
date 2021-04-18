@@ -1,8 +1,10 @@
 package ua.kpi.tef.essd.entity;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.*;
@@ -12,7 +14,9 @@ import java.util.stream.Collectors;
 @Table(name = "clothes")
 @NoArgsConstructor
 @Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Clothing {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,36 +32,27 @@ public class Clothing {
     @Setter
     private Size size;
 
-    @OneToMany(mappedBy = "clothing", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "clothing", cascade = CascadeType.ALL)
     @Setter
+    @JsonIgnoreProperties({"id", "clothing"})
     private List<ClothingPart> parts = new LinkedList<>();
 
-    @OneToMany(mappedBy = "clothing", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "clothing", cascade = CascadeType.ALL)
     @Setter
+    @JsonIdentityReference(alwaysAsId=true)
     private List<Order> orders = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @Setter
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "clothes", "clothesSets", "orders", "roles"})
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clothes_set_id")
     @Setter
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "setOfClothes", "user"})
     private ClothesSet clothesSet;
-
-    public Clothing(String name, Type type, Size size) {
-        this.name = name;
-        this.type = type;
-        this.size = size;
-    }
-
-    public Clothing(String name, Type type, Size size, User user) {
-        this.name = name;
-        this.type = type;
-        this.size = size;
-        this.user = user;
-    }
 
     public Clothing(String name, Type type, Size size, User user, ClothesSet clothesSet) {
         this.name = name;

@@ -14,12 +14,13 @@ import ua.kpi.tef.essd.entity.User;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// UserControllerIntegrationTest (integration test) - where we use controller to insert and check using Service
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ContextConfiguration(classes = ApplicationConfiguration.class)
 @Transactional
 @AutoConfigureTestEntityManager
-class UserControllerTest {
+class UserControllerIntegrationTest {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -28,8 +29,8 @@ class UserControllerTest {
     UserController userController;
 
     @Test
-    public void When_createUser_Expect_UserPersisted() {
-        User user = new User("Tester", 10, "nothing interesting");
+    void When_createUser_Expect_UserPersisted() {
+        User user = new User("Tester", 10, "nothing interesting", null, null, null);
 
         userController.createUser(user);
         User found = entityManager.find(User.class, user.getId());
@@ -38,8 +39,8 @@ class UserControllerTest {
     }
 
     @Test
-    public void When_updateUser_Expect_UserUpdated() {
-        User user = new User("Tester", 10, "nothing interesting");
+    void When_updateUser_Expect_UserUpdated() {
+        User user = new User("Tester", 10, "nothing interesting", null, null, null);
         entityManager.persist(user);
 
         user.setName("Changed");

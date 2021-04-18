@@ -1,64 +1,168 @@
 package ua.kpi.tef.essd.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
-import ua.kpi.tef.essd.config.ApplicationConfiguration;
-import ua.kpi.tef.essd.dao.PartDao;
+import ua.kpi.tef.essd.config.ApplicationTestConfiguration;
 import ua.kpi.tef.essd.entity.*;
+import ua.kpi.tef.essd.exception.ResourceNotFoundException;
+import ua.kpi.tef.essd.exception.WrongValueException;
+import ua.kpi.tef.essd.repository.PartRepository;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = ApplicationConfiguration.class)
-@AutoConfigureTestEntityManager
+@SpringBootTest(classes = ApplicationTestConfiguration.class)
 class PartServiceTest {
+
+    @MockBean
+    private PartRepository partRepository;
+
+    @MockBean
+    private ClothingService clothingService;
 
     @Autowired
     private PartService partService;
 
-    @Autowired
-    private PartDao partDao;
+    Part part;
+    Part part1;
+    Part part2;
+    Clothing clothing;
+    Clothing clothing1;
 
-    @Test
-    void When_getPart_Expect_Returned() {
-        // Setup our mock dao
-        //User user = new User("Tester", 10, "nothing interesting");
-
-        // Execute the service call
-        assertEquals("", partService.getPartInfo(1));
-
-        // verify that mock called
-        //verify(userDao).save(user);
+    @BeforeEach
+    void setup() {
+        // prepare data for our tests
+        part = new Part("part", null);
+        part1 = new Part("part1", null);
+        part2 = new Part("part2", null);
+        clothing = new Clothing("clothing", Type.MAN, Size.XL, null, null);
+        clothing1 = new Clothing("clothing1", Type.MAN, Size.XL, null, null);
+        clothing1.addPart(part1, 1);
+        clothing1.addPart(part2, 10);
     }
 
-    @Autowired
-    private TestEntityManager entityManager;
     @Test
-    @Transactional
-    void When_getUserInfo_Expect_String() {
-        /*User user = entityManager.find(User.class, 1);
-        doReturn(user).when(userDao).findById(user.getId());
+    void When_addPartToClothing_Expect_Added() {
+        int clothingId = 1;
+        int partId = 1;
+        int amount = 10;
+        when(partRepository.findById(partId)).thenReturn(Optional.of(part));
+        when(clothingService.getClothing(clothingId)).thenReturn(clothing);
 
-        String returned = userService.getUserInfo(user.getId());
+        partService.addPartToClothing(clothingId, partId, amount);
 
-        verify(userDao).findById(user.getId());
-        assertEquals(user.toString(), returned, "The service returned was not the same as the mock");*/
-        Clothing clothing = new Clothing("Tester Shirt", Type.CHILDREN, Size.S);
-        entityManager.persist(clothing);
+        verify(partRepository).save(part);
+        assertEquals(part, clothing.getParts().get(0).getPart());
+        assertEquals(amount, clothing.getParts().get(0).getAmount());
+    }
 
-        Part part = partDao.findById(1);
+    @Test
+    void When_addPartToClothingWrongAmount_Expect_Exception() {
+        int amount = -2;
 
-        partService.addPartToClothing(clothing.getId(), part.getId(), 4);
+        assertThrows(WrongValueException.class, () -> partService.addPartToClothing(1, 1, amount));
+    }
 
-        assertEquals("", partService.getClothingParts(clothing.getId()));
+    @Test
+    void When_getPartById_Expect_Entity() {
+        // Setup our mock repository
+        when(partRepository.findById(1)).thenReturn(Optional.of(part));
+
+        // Execute the service call
+        Part returnedUser = partService.getPart(1);
+
+        // verify that mock called and data is correct
+        assertNotNull(returnedUser, "Part was not found");
+        assertSame(returnedUser, part, "The service returned was not the same as the mock");
+    }
+
+    @Test
+    void When_getPartByWrongId_Expect_ResourceNotFoundException() {
+        // Setup our mock
+        int partId = 1;
+        when(partRepository.findById(partId)).thenReturn(Optional.empty());
+
+        // verify that correct exception thrown
+        assertThrows(ResourceNotFoundException.class, () -> partService.getPart(partId));
+    }
+
+    @Test
+    void When_getAllParts_Expect_ListOfEntities() {
+        List<Part> expected = List.of(part1, part2);
+        when(partRepository.findAll()).thenReturn(expected);
+
+        List<Part> returned = partService.getAllParts();
+
+        assertNotNull(returned, "Parts were not found");
+        assertSame(expected, returned, "The service returned was not the same as the mock");
+    }
+
+   @Test
+    void When_getClothingParts_Expect_ListOfEntities() {
+        int clothingId = 1;
+        when(clothingService.getClothing(clothingId)).thenReturn(clothing1);
+
+        List<ClothingPart> returned = partService.getClothingParts(clothingId);
+
+        assertNotNull(returned, "Parts were not found");
+        assertSame(clothing1.getParts(), returned, "The service returned was not the same as the mock");
+    }
+
+    @Test
+    void When_changePartInClothing_Expect_ChangeAmount() {
+        int clothingId = 1;
+        int partId = 1;
+        int amount = 5;
+        when(partRepository.findById(partId)).thenReturn(Optional.of(part1));
+        when(clothingService.getClothing(clothingId)).thenReturn(clothing1);
+
+        partService.changePartInClothingAmount(clothingId, partId, amount);
+
+        verify(partRepository).save(part1);
+        assertThat(clothing1.getParts()
+                .stream()
+                .map(ClothingPart::getPart)
+                .collect(Collectors.toList()), hasItems(part1, part2));
+        assertEquals(amount, clothing1.getParts().stream()
+                .filter(cp -> cp.getPart().equals(part1))
+                .findFirst()
+                .orElseGet(() -> new ClothingPart(clothing1, part1, -1))
+                .getAmount());
+    }
+
+    @Test
+    void When_changePartInClothingAmountToZero_Expect_Removed() {
+        int clothingId = 1;
+        int partId = 1;
+        int amount = 0;
+        when(partRepository.findById(partId)).thenReturn(Optional.of(part1));
+        when(clothingService.getClothing(clothingId)).thenReturn(clothing1);
+
+        partService.changePartInClothingAmount(clothingId, partId, amount);
+
+        verify(partRepository).save(part1);
+        assertThat(clothing1.getParts()
+                .stream()
+                .map(ClothingPart::getPart)
+                .collect(Collectors.toList()), hasItem(part2));
+        assertThat(clothing1.getParts()
+                .stream()
+                .map(ClothingPart::getPart)
+                .collect(Collectors.toList()), not(hasItem(part1)));
     }
 
 }

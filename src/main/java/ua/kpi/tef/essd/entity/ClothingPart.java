@@ -1,5 +1,6 @@
 package ua.kpi.tef.essd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class ClothingPart {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("partId")
     @JoinColumn(name = "part_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Part part;
 
     private Integer amount;

@@ -29,7 +29,6 @@ public class ClothesSetServiceImpl implements ClothesSetService {
     @Override
     public void saveClothesSetOfUser(Integer userId, ClothesSet clothesSet) {
         userService.getUser(userId).addClothesSet(clothesSet);
-
         clothesSetRepository.save(clothesSet);
     }
 
@@ -40,24 +39,10 @@ public class ClothesSetServiceImpl implements ClothesSetService {
 
     @Override
     public ClothesSet getClothesSetOfClothing(Integer clothingId) {
-        ClothesSet clothesSet = clothingService.getClothing(clothingId).getClothesSet();
-        clothesSet.getName(); // lazy load all properties
-        return clothesSet;
-    }
-
-    @Override
-    public String getClothesSetInfo(Integer clothesSetId) {
-        return clothesSetRepository.findById(clothesSetId)
-                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.CLOTHES_SET, clothesSetId))
-                .toString();
+        return clothingService.getClothing(clothingId).getClothesSet(); // clothesSet.getName(); for lazy loading
     }
 
 //  ---- Simple CRUD methods ----
-
-    @Override
-    public void saveClothesSet(ClothesSet clothesSet) {
-        clothesSetRepository.save(clothesSet);
-    }
 
     @Override
     public ClothesSet getClothesSet(Integer id) {
@@ -72,6 +57,10 @@ public class ClothesSetServiceImpl implements ClothesSetService {
 
     @Override
     public void deleteClothesSet(Integer id) {
-        clothesSetRepository.deleteById(id);
+        ClothesSet clothesSet = clothesSetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.CLOTHES_SET, id));
+        clothesSet.getSetOfClothes()
+                .forEach(clothesSet::removeClothing);
+        clothesSetRepository.delete(clothesSet);
     }
 }

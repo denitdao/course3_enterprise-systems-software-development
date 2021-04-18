@@ -1,5 +1,8 @@
 package ua.kpi.tef.essd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +15,9 @@ import java.util.List;
 @Table(name = "clothes_sets")
 @NoArgsConstructor
 @Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ClothesSet {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -20,18 +25,15 @@ public class ClothesSet {
     @Setter
     private String name;
 
-    @OneToMany(mappedBy = "clothesSet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "clothesSet", cascade = {CascadeType.MERGE, CascadeType.DETACH})
+    @JsonIgnoreProperties({"parts", "orders", "clothesSet", "user"})
     private final List<Clothing> setOfClothes = new LinkedList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @Setter
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "clothes", "clothesSets", "orders", "roles"})
     private User user;
-
-    public ClothesSet(String name, List<Clothing> setOfClothes) {
-        this.name = name;
-        setSetOfClothes(setOfClothes);
-    }
 
     public ClothesSet(String name, List<Clothing> setOfClothes, User user) {
         this.name = name;

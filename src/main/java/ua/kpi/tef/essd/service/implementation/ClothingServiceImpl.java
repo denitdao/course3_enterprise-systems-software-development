@@ -1,6 +1,7 @@
 package ua.kpi.tef.essd.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kpi.tef.essd.entity.Clothing;
@@ -38,24 +39,13 @@ public class ClothingServiceImpl implements ClothingService {
     }
 
     @Override
-    public String getClothingInfo(Integer clothingId) {
-        return clothingRepository.findById(clothingId)
-                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.CLOTHING, clothingId)).toString();
-    }
-
-    @Override
     public void addClothingToSet(Integer clothesSetId, Integer clothingId) {
-        Clothing clothing = clothingRepository.findById(clothingId)
-                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.CLOTHING, clothingId));
+        Clothing clothing = getClothing(clothingId);
         clothesSetService.getClothesSet(clothesSetId).addClothing(clothing);
+        clothingRepository.save(clothing);
     }
 
 //  ---- Simple CRUD methods ----
-
-    @Override
-    public void saveClothing(Clothing clothing) {
-        clothingRepository.save(clothing);
-    }
 
     @Override
     public Clothing getClothing(Integer id) {
@@ -70,7 +60,11 @@ public class ClothingServiceImpl implements ClothingService {
 
     @Override
     public void deleteClothing(Integer clothingId) {
-        clothingRepository.deleteById(clothingId);
+        try {
+            clothingRepository.deleteById(clothingId);
+        } catch (DataAccessException ex) {
+            throw new ResourceNotFoundException(EntityNames.CLOTHING, clothingId);
+        }
     }
 
 }
