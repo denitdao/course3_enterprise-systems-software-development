@@ -31,7 +31,7 @@ public class User {
     private String description;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH})
-    @JsonIgnoreProperties({"parts", "orders", "user", "clothesSet"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "parts", "orders", "user", "clothesSet"})
     private final List<Clothing> clothes = new LinkedList<>();
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.DETACH})

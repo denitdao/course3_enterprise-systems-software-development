@@ -19,7 +19,7 @@ public class AdminController {
     private OrderService orderService;
 
     @PutMapping
-    public void changeOrderStatus(@RequestBody Integer orderId, @RequestBody OrderStatus status) {
+    public void changeOrderStatus(@RequestParam Integer orderId, @RequestParam OrderStatus status) {
         orderService.changeOrderStatus(orderId, status);
     }
 
