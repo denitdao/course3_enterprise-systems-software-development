@@ -9,15 +9,15 @@
             Persistence unit for the Clothes Designer Application
         </description>
 
-        <class>ua.kpi.tef.essd.entity.User</class>
-        <class>ua.kpi.tef.essd.entity.ClothesSet</class>
-        <class>ua.kpi.tef.essd.entity.Clothing</class>
-        <class>ua.kpi.tef.essd.entity.Part</class>
-        <class>ua.kpi.tef.essd.entity.Property</class>
-        <class>ua.kpi.tef.essd.entity.ClothingPart</class>
-        <class>ua.kpi.tef.essd.entity.ClothingPartKey</class>
-        <class>ua.kpi.tef.essd.entity.Order</class>
-        <class>ua.kpi.tef.essd.entity.Role</class>
+        <class>ua.kpi.tef.essd.backend.entity.User</class>
+        <class>ua.kpi.tef.essd.backend.entity.ClothesSet</class>
+        <class>ua.kpi.tef.essd.backend.entity.Clothing</class>
+        <class>ua.kpi.tef.essd.backend.entity.Part</class>
+        <class>ua.kpi.tef.essd.backend.entity.Property</class>
+        <class>ua.kpi.tef.essd.backend.entity.ClothingPart</class>
+        <class>ua.kpi.tef.essd.backend.entity.ClothingPartKey</class>
+        <class>ua.kpi.tef.essd.backend.entity.Order</class>
+        <class>ua.kpi.tef.essd.backend.entity.Role</class>
 
         <properties>
             <property name="hibernate.connection.driver" value="com.mysql.cj.jdbc.Driver"/>
