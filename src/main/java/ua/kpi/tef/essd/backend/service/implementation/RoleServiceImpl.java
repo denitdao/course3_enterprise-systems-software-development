@@ -23,7 +23,6 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
 
     @Override
-    @Transactional
     public List<Role> getRolesOfUser(Integer userId) {
         User user = userService.getUser(userId);
         List<Role> roles = user.getRoles();

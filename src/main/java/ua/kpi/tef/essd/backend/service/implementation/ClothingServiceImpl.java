@@ -1,5 +1,6 @@
 package ua.kpi.tef.essd.backend.service.implementation;
 
+import lombok.extern.log4j.Log4j2;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -52,8 +53,10 @@ public class ClothingServiceImpl implements ClothingService {
 
     @Override
     public Clothing getClothing(Integer id) {
-        return clothingRepository.findById(id)
+        Clothing clothing = clothingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(EntityNames.CLOTHING, id));
+        Hibernate.initialize(clothing);
+        return clothing;
     }
 
     @Override

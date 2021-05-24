@@ -1,6 +1,6 @@
 package ua.kpi.tef.essd.backend.api;
 
-import org.hibernate.Hibernate;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ua.kpi.tef.essd.backend.entity.Clothing;
@@ -30,9 +30,7 @@ public class ClothingRestController {
 
     @GetMapping("/user/{userId}")
     public List<Clothing> getClothesOfUser(@PathVariable Integer userId) {
-        List<Clothing> clothesOfUser = clothingService.getClothesOfUser(userId);
-        System.out.println(clothesOfUser.size());
-        return clothesOfUser;
+        return clothingService.getClothesOfUser(userId);
     }
 
     @PostMapping("/add_to_set")

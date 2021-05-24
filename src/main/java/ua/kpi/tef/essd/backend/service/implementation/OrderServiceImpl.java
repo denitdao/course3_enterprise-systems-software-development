@@ -65,8 +65,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrder(Integer id) {
-        return orderRepository.findById(id)
+        Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(EntityNames.ORDER, id));
+        Hibernate.initialize(order);
+        return order;
     }
 
     @Override

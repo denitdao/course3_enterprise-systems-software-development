@@ -1,5 +1,6 @@
 package ua.kpi.tef.essd.backend.service.implementation;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,20 +35,26 @@ public class ClothesSetServiceImpl implements ClothesSetService {
 
     @Override
     public List<ClothesSet> getClothesSetsOfUser(Integer userId) {
-        return userService.getUser(userId).getClothesSets();
+        List<ClothesSet> clothesSets = userService.getUser(userId).getClothesSets();
+        clothesSets.forEach(Hibernate::initialize);
+        return clothesSets;
     }
 
     @Override
     public ClothesSet getClothesSetOfClothing(Integer clothingId) {
-        return clothingService.getClothing(clothingId).getClothesSet(); // clothesSet.getName(); for lazy loading
+        ClothesSet clothesSet = clothingService.getClothing(clothingId).getClothesSet();
+        Hibernate.initialize(clothesSet);
+        return clothesSet;
     }
 
 //  ---- Simple CRUD methods ----
 
     @Override
     public ClothesSet getClothesSet(Integer id) {
-        return clothesSetRepository.findById(id)
+        ClothesSet clothesSet = clothesSetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(EntityNames.CLOTHES_SET, id));
+        Hibernate.initialize(clothesSet);
+        return clothesSet;
     }
 
     @Override

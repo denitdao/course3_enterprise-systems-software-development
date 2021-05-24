@@ -1,5 +1,6 @@
 package ua.kpi.tef.essd.backend.service.implementation;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,19 +52,26 @@ public class PartServiceImpl implements PartService {
 
     @Override
     public List<Part> getAllParts() {
-        return partRepository.findAll();
+        List<Part> parts = partRepository.findAll();
+        parts.forEach(Hibernate::initialize);
+        return parts;
     }
 
     @Override
     public List<ClothingPart> getClothingParts(Integer clothingId) {
-        return clothingService.getClothing(clothingId).getParts(); // clothingParts.forEach(cp -> cp.getPart().getName()); load the parts
+        List<ClothingPart> parts = clothingService.getClothing(clothingId).getParts();
+        parts.forEach(Hibernate::initialize);
+        return parts;
     }
 
     //  ---- Simple CRUD methods ----
 
     @Override
     public Part getPart(Integer id) {
-        return partRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(EntityNames.PART, id));
+        Part part = partRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(EntityNames.PART, id));
+        Hibernate.initialize(part);
+        return part;
     }
 
 }
