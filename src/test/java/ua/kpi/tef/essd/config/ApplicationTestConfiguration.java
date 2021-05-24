@@ -13,8 +13,8 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "ua.kpi.tef.essd.repository")
-@ComponentScan(basePackages = {"ua.kpi.tef.essd.controller", "ua.kpi.tef.essd.service"})
+@EnableJpaRepositories(basePackages = "ua.kpi.tef.essd.backend.repository")
+@ComponentScan(basePackages = {"ua.kpi.tef.essd.backend.api", "ua.kpi.tef.essd.backend.service"})
 public class ApplicationTestConfiguration {
 
     @Bean

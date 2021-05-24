@@ -1,38 +1,56 @@
 plugins {
-    id 'org.springframework.boot' version '2.4.3'
+    id 'org.springframework.boot' version '2.4.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'com.vaadin' version '0.14.3.7'
     id 'java'
 }
 
 group 'ua.denitdao'
 version '1.0-SNAPSHOT'
 
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    compile.exclude module: 'spring-boot-starter-logging'
+}
+
 repositories {
     mavenCentral()
+    maven {
+        url "https://maven.vaadin.com/vaadin-addons"
+    }
+}
+
+ext {
+    set('vaadinVersion', "14.6.1")
 }
 
 dependencies {
-    compile 'org.clojure:java.jdbc:0.7.12'
-    compile 'org.hibernate:hibernate-core:5.4.28.Final'
-    compile 'mysql:mysql-connector-java:8.0.23'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.vaadin:vaadin-spring-boot-starter'
+    implementation 'org.vaadin.artur:a-vaadin-helper:1.6.0'
 
-    compileOnly 'org.projectlombok:lombok:1.18.18'
-    annotationProcessor 'org.projectlombok:lombok:1.18.18'
-    testCompileOnly 'org.projectlombok:lombok:1.18.18'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.18'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.4.3'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
-    testImplementation 'com.h2database:h2:1.4.200'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    compileOnly 'org.clojure:java.jdbc:0.7.12'
+    compileOnly 'org.hibernate:hibernate-core:5.4.28.Final'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'mysql:mysql-connector-java'
 
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.4.3'
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2:2.4.3'
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.4.3'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.hamcrest:hamcrest'
+    implementation 'org.hibernate:hibernate-validator:7.0.1.Final'
 }
 
-configurations {
-    compile.exclude module: 'spring-boot-starter-logging'
+dependencyManagement {
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
+    }
 }
 
 test {
