@@ -23,7 +23,7 @@ public class Role {
 
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"clothes", "clothesSets", "orders", "roles"})
     private final List<User> users = new LinkedList<>();
 

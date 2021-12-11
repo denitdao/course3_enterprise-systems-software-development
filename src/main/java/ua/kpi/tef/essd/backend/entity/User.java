@@ -44,7 +44,7 @@ public class User {
     @JsonIgnoreProperties({"user", "clothing"})
     private final List<Order> orders = new LinkedList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

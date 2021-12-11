@@ -77,8 +77,9 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[]{createTab("Hello World", HelloWorldView.class), createTab("Users", UsersView.class),
-                createTab("Profile", ProfileView.class), createTab("Some", SomeView.class)};
+        return new Tab[]{createTab("Hello World", HelloWorldView.class),
+                createTab("Users", UsersView.class),
+                createTab("Some", SomeView.class)};
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
